@@ -27,7 +27,6 @@ type Feature = {
   key: string;
   label: string;
   icon: React.ReactNode;
-  onClick?: () => void;
   iconColorClass: string;
   highlighted?: boolean;
 };
@@ -82,36 +81,44 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
   return (
     <>
       <div 
-        className={`fixed left-6 bottom-32 z-50 animate-fade-in ${className}`}
-        style={{ minWidth: 288, maxWidth: 350 }}
+        className={`
+          fixed left-1/2 bottom-28 z-50 animate-fade-in ${className}
+          transform -translate-x-1/2
+        `}
+        style={{ minWidth: 330, maxWidth: 360 }}
         tabIndex={-1}
         onMouseDown={e => e.stopPropagation()}
       >
-        <div className={`
-          rounded-3xl
-          bg-[#fffbea]
-          border border-[#e9ddb9]
-          shadow-lg
-          overflow-hidden
-          transition-all
-          duration-300
-        `}>
+        <div className="rounded-[24px] bg-[#fffbea] border border-[#e9ddb9] shadow-2xl overflow-hidden transition-all duration-300 max-w-full min-w-[320px]">
+          {/* HEADER for consistency */}
+          <div className="bg-yellow-400 px-6 py-4 flex items-center justify-center text-center font-bold text-lg text-gray-900" style={{ borderTopLeftRadius: 24, borderTopRightRadius: 24, position: "relative" }}>
+            Features
+            <button
+              className="absolute right-5 top-1/2 -translate-y-1/2 bg-yellow-300 hover:bg-yellow-200 rounded-full p-1"
+              style={{ border: "none" }}
+              aria-label="Close features"
+              onClick={onClose}
+            >
+              <span className="sr-only">Close</span>
+              <span aria-hidden>×</span>
+            </button>
+          </div>
           <div className="divide-y divide-[#efe2bc]">
             {features.map((feature, i) => (
               <button
                 key={feature.key}
                 className={`
-                  flex items-center gap-3 w-full px-6 py-4 text-[1.09rem] font-semibold focus:outline-none transition
-                  ${feature.highlighted ? 'bg-yellow-100/90' : 'bg-transparent'}
-                  hover:bg-yellow-200/90
-                  text-gray-800
-                  ${i === 0 ? "rounded-t-2xl" : ""}
-                  ${i === features.length - 1 ? "rounded-b-2xl" : ""}
+                  flex items-center gap-3 w-full px-7 py-4 text-base font-semibold focus:outline-none transition
+                  ${feature.highlighted ? 'bg-yellow-100/90' : 'bg-white'}
+                  hover:bg-yellow-50
+                  text-gray-900
+                  ${i === 0 ? "rounded-t-none" : ""}
+                  ${i === features.length - 1 ? "rounded-b-none" : ""}
                 `}
                 style={{
                   borderRadius:
                     i === 0
-                      ? "24px 24px 0 0"
+                      ? "0"
                       : i === features.length - 1
                       ? "0 0 24px 24px"
                       : undefined
@@ -122,7 +129,7 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
                   onFeatureClick(feature.key);
                 }}
               >
-                <span className={"w-7 h-7 flex items-center justify-center"}>{feature.icon}</span>
+                <span className="w-7 h-7 flex items-center justify-center">{feature.icon}</span>
                 <span className="ml-2">{feature.label}</span>
               </button>
             ))}

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { X } from "lucide-react";
@@ -26,25 +25,26 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
         style={{ borderRadius: 24 }}
       >
         {/* HEADER */}
-        <div className="bg-yellow-400 text-center flex items-center justify-between px-5 py-4" style={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
+        <div className="bg-yellow-400 flex items-center justify-center px-5 py-4 text-center relative" style={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
           <span className="text-lg font-bold w-full">Bee Counsellor</span>
           <button
             aria-label="Close"
-            className="absolute left-4 top-4 bg-yellow-300 hover:bg-yellow-200 rounded-full p-1"
+            className="absolute right-5 top-1/2 -translate-y-1/2 bg-yellow-300 hover:bg-yellow-200 rounded-full p-1"
             onClick={onClose}
             style={{ border: "none" }}
           >
-            <X size={20} />
+            <span className="sr-only">Close</span>
+            <span aria-hidden>×</span>
           </button>
         </div>
         {/* PROMPT */}
-        <div className="px-6 pt-6 pb-2 text-center">
-          <h2 className="text-lg font-semibold mb-5">How are you feeling?</h2>
+        <div className="px-8 pt-7 pb-2 text-center bg-white rounded-b-2xl">
+          <h2 className="text-lg font-semibold mb-5 text-gray-900">How are you feeling?</h2>
           <div className="grid grid-cols-2 gap-4">
             {moodOptions.map(({ key, label, img }) => (
               <button
                 key={key}
-                className="flex flex-col items-center bg-white border-2 border-yellow-200 rounded-xl py-5 px-2 hover:bg-yellow-100 transition"
+                className="flex flex-col items-center bg-[#fffbea] border-2 border-yellow-200 rounded-xl py-5 px-2 hover:bg-yellow-100 transition"
                 onClick={() => onMoodSelect?.(key)}
                 style={{ minHeight: 108 }}
               >
@@ -65,4 +65,3 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
 };
 
 export default HealMeModal;
-
