@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { X, MoreVertical, MessageCircle, Trash2, ChevronLeft, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ConversationHistory from './ConversationHistory';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Card, CardContent } from '@/components/ui/card';
-import { Hand } from 'lucide-react';
 
 interface Conversation {
   id: string;
@@ -111,8 +111,8 @@ const ChatInterface = () => {
             <div className="w-full px-4 flex-grow flex flex-col justify-center">
               <div className="mb-4">
                 <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                  Hi there 
-                  <span className="animate-bounce">👋</span>
+                  Hi there!
+                  <span>👋</span>
                 </h2>
                 <p className={`leading-relaxed text-base`}>
                   Welcome to Savvy Bot. Feel free to ask me anything about your finances!
@@ -129,11 +129,15 @@ const ChatInterface = () => {
           <h3 className="text-black font-semibold mb-4 text-lg">Start Conversation</h3>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-black/20 rounded-full flex items-center justify-center">
-              <Hand className="text-yellow-400 w-7 h-7" />
+              <MessageCircle size={20} className="text-black" />
             </div>
-            <p className="text-black/80 flex-1">
-              Tap here to begin a new chat with your personal finance assistant.
-            </p>
+            <div>
+              <p className="text-black font-medium">Typical Reply Time</p>
+              <p className="text-black/70 text-sm flex items-center gap-1">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                2 Min
+              </p>
+            </div>
           </div>
           <button 
             onClick={handleStartConversation}
