@@ -27,14 +27,14 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onClick={onFeaturesButtonClick}
           aria-label="Show chat features"
           type="button"
-          className={`absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center border-none bg-[#E8E9EB] hover:bg-[#C5C5C7] transition ${featuresRotated ? 'rotate-45' : ''}`}
+          className={`absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center border-none bg-[#E8E9EB] hover:bg-[#C5C5C7] transition ${featuresRotated ? 'rotate-45' : ''}`}
           style={{outline: 'none'}}
         >
-          <Plus size={20} className="text-[#7D7F85]" />
+          <Plus size={22} className="text-[#7D7F85]" />
         </button>
         {/* Input Field */}
         <div
-          className={`mx-auto w-[328px] min-h-[42px] pl-12 pr-12 py-2.5 rounded-full border focus-within:border-[#C5C5C7] border-[#C5C5C7] bg-white flex items-center font-manrope transition-all`}
+          className={`mx-auto w-[328px] min-h-[42px] pl-14 pr-12 py-2.5 rounded-full border focus-within:border-[#C5C5C7] border-[#C5C5C7] bg-white flex items-center font-manrope transition-all`}
           style={{
             outline: '1px #C5C5C7 solid',
             outlineOffset: '-1px',
