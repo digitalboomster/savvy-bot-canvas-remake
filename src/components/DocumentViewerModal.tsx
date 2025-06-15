@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import DocumentViewerModalHeader from "./DocumentViewerModalHeader";
 
 interface DocumentViewerModalProps {
   open: boolean;
@@ -14,13 +13,17 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-sm p-0 rounded-2xl overflow-hidden shadow-2xl border-none" style={{ borderRadius: 24 }}>
-        {/* HEADER */}
-        <div className="bg-yellow-400 flex items-center justify-center px-5 py-4 text-center relative" style={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
-          <span className="text-lg font-bold w-full">My Documents</span>
-          {/* Removed custom close button - inside DialogContent from shadcn/ui, a close button is already rendered */}
+      <DialogContent
+        className="max-w-sm p-0 rounded-[24px] border border-[#e9ddb9] bg-[#fffbea] shadow-2xl overflow-hidden"
+        style={{ borderRadius: 24 }}
+      >
+        {/* Title, subtle and centered like the feature panel, no yellow header bar */}
+        <div className="flex flex-col items-center justify-center pt-7 pb-2">
+          <span className="text-lg font-bold text-gray-900">My Documents</span>
         </div>
-        {/* NO DOCS */}
+        {/* Divider to mirror features panel */}
+        <div className="w-full h-[1px] bg-[#efe2bc] mb-0" />
+        {/* Body with "No documents yet" layout and color */}
         <div className="p-8 flex flex-col items-center justify-center text-center w-full min-h-[215px] bg-white rounded-b-2xl">
           <span className="text-3xl mb-2" role="img" aria-label="Empty">📄</span>
           <span className="text-lg font-medium text-gray-600">No documents yet</span>
@@ -34,4 +37,3 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
 };
 
 export default DocumentViewerModal;
-
