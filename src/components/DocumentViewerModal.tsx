@@ -79,17 +79,16 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-[#fffcf4] border-[#e9ddb9] rounded-3xl p-0 shadow-xl">
-        {/* Header */}
+        {/* Dialog Title for accessibility */}
+        <span className="sr-only">
+          <span id="my-documents-modal-title">My Documents</span>
+        </span>
+        {/* Header (remove custom close button) */}
         <div className="flex flex-row items-center justify-between px-7 pt-6 pb-3 border-b border-[#efe2bc] bg-[#fffbea]">
-          <span className="font-bold text-lg text-gray-800">My Documents</span>
-          <button
-            className="hover:bg-yellow-100 rounded-full transition p-2 ml-2"
-            onClick={onClose}
-            aria-label="Close"
-            type="button"
-          >
-            <X size={23} />
-          </button>
+          <span className="font-bold text-lg text-gray-800" id="my-documents-modal-title">
+            My Documents
+          </span>
+          {/* The custom close button was REMOVED to avoid duplicate 'X' */}
         </div>
 
         {/* Controls */}
@@ -204,3 +203,4 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
 };
 
 export default DocumentViewerModal;
+
