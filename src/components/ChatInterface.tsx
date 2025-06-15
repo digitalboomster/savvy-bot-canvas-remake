@@ -122,7 +122,7 @@ const ChatInterface = () => {
       </div>
       
       {/* Content in centralized container */}
-      <div className="w-full max-w-md mx-auto px-4 relative z-10 -mt-16 md:-mt-20">
+      <div className="w-full max-w-md mx-auto px-4 relative z-10 -mt-12 md:-mt-16">
         {/* Conversation Starter */}
         <div className="bg-yellow-400 p-6 rounded-2xl mb-8 shadow-xl transform hover:scale-105 transition-transform duration-200">
           <h3 className="text-black font-semibold mb-4 text-lg">Start Conversation</h3>
