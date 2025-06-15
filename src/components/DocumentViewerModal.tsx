@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import DocumentViewerModalHeader from "./DocumentViewerModalHeader";
@@ -63,8 +62,6 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
         </span>
         <DocumentViewerModalHeader onBack={onClose} />
         <DocumentViewerModalControls
-          sortBy={sortBy}
-          setSortBy={setSortBy}
           selectedCount={selected.length}
           totalCount={displayDocs.length}
           onDeleteSelected={handleDeleteSelected}
