@@ -1,6 +1,6 @@
+
 import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { X } from "lucide-react";
 
 interface HealMeModalProps {
   open: boolean;
@@ -27,15 +27,7 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
         {/* HEADER */}
         <div className="bg-yellow-400 flex items-center justify-center px-5 py-4 text-center relative" style={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
           <span className="text-lg font-bold w-full">Bee Counsellor</span>
-          <button
-            aria-label="Close"
-            className="absolute right-5 top-1/2 -translate-y-1/2 bg-yellow-300 hover:bg-yellow-200 rounded-full p-1"
-            onClick={onClose}
-            style={{ border: "none" }}
-          >
-            <span className="sr-only">Close</span>
-            <span aria-hidden>×</span>
-          </button>
+          {/* Removed custom close button. Only shadcn/ui DialogContent's close button will be shown */}
         </div>
         {/* PROMPT */}
         <div className="px-8 pt-7 pb-2 text-center bg-white rounded-b-2xl">
