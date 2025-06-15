@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from groq import Groq
@@ -6,6 +5,7 @@ from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 from openai import OpenAI
 import os
+import json
 
 # Load .env if present (useful for local testing)
 load_dotenv()
@@ -33,6 +33,43 @@ You're SaavyBee - a human-like financial friend, counsellor and assistant. Rules
 11. Strict limit on vulgar language
 """
 
+ANALYSIS_SYSTEM_PROMPT = """
+You are a financial analyst and psychologist AI. Your task is to analyze a user's chat history and provide a concise, insightful profile. The user is seeking to understand themselves better, particularly their financial habits and personality.
+
+**Analysis Input:** You will receive a JSON object containing a `chat_history`, which is a list of messages.
+
+**Output Format:** You MUST return a JSON object with the following structure. Do NOT include any explanations or markdown formatting like ```json.
+
+{
+  "personality_sketch": {
+    "title": "Personality Sketch",
+    "description": "A brief, empathetic summary of the user's apparent personality (e.g., curious, reserved, anxious, confident).",
+    "emoji": "🧐"
+  },
+  "spending_habit_profile": {
+    "title": "Spending Habit Profile",
+    "description": "An analysis of the user's financial habits based on the conversation. Identify patterns (e.g., impulsive spending, diligent saving, anxiety about bills). If no data, state that.",
+    "emoji": "💸"
+  },
+  "interests_themes": {
+    "title": "Interests & Themes",
+    "description": "Identify recurring topics or themes in the conversation (e.g., career stress, family, specific financial goals, hobbies).",
+    "emoji": "💡"
+  },
+  "savvy_insight": {
+    "title": "Savvy Bee's Insight",
+    "description": "A single, actionable piece of advice or an encouraging observation, like a friend would give. Tie it to their situation. Be supportive and gentle.",
+    "emoji": "🐝"
+  }
+}
+
+**Rules:**
+1.  **Be Empathetic and Non-Judgmental:** Frame observations constructively.
+2.  **Infer, Don't Assume:** Base your analysis strictly on the provided text. If there's not enough information for a category, state "Not enough information to determine."
+3.  **Keep it Concise:** Each description should be 1-2 sentences long.
+4.  **JSON ONLY:** Your entire response must be a single, valid JSON object.
+"""
+
 @app.route('/')
 def home():
     return jsonify({"message": "Backend is running."})
@@ -58,6 +95,37 @@ def chat():
         return jsonify({"reply": reply})
 
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    try:
+        data = request.get_json()
+        chat_history = data.get("chat_history")
+
+        if not chat_history:
+            return jsonify({"error": "No chat history provided"}), 400
+
+        # Format chat history for the model
+        formatted_history = "\n".join([f"{'User' if msg['isUser'] else 'AI'}: {msg['text']}" for msg in chat_history])
+
+        user_content = f"Please analyze the following conversation:\n\n{formatted_history}"
+
+        response = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": ANALYSIS_SYSTEM_PROMPT},
+                {"role": "user", "content": user_content}
+            ],
+            model="llama3-70b-8192",
+            temperature=0.5,
+            response_format={"type": "json_object"} # Use JSON mode
+        )
+        analysis_json_str = response.choices[0].message.content
+        analysis_data = json.loads(analysis_json_str)
+        return jsonify(analysis_data)
+
+    except Exception as e:
+        app.logger.error(f"Analysis Error: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/transcribe', methods=['POST'])
@@ -133,4 +201,3 @@ def funds_alert():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-

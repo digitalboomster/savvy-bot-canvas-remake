@@ -55,6 +55,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
               style={{
                 borderTopLeftRadius: !message.isUser ? 6 : 18,
                 borderTopRightRadius: message.isUser ? 6 : 18,
+                whiteSpace: "pre-wrap",
               }}
             >
               {message.text}

@@ -70,7 +70,7 @@ const ChatPage = () => {
     handleMoodSelect,
     handleCloseDocsAndShowFeatures,
     onFeaturesButtonClick,
-  } = useChatModals();
+  } = useChatModals(messages, setMessages, setShowWelcome);
 
   // ---- Use theme from context! ----
   const { isDarkMode, toggleTheme } = useTheme();
