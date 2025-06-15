@@ -1,3 +1,4 @@
+
 import React from "react";
 
 interface ChatWelcomeProps {
@@ -26,17 +27,6 @@ const ChatWelcome: React.FC<ChatWelcomeProps> = ({
 }) => {
   return (
     <div className="p-6 space-y-6">
-      {/* Privacy Message */}
-      <div className={`${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-2xl p-6`}>
-        <div className="flex items-start gap-3">
-          <AiAvatar isDarkMode={isDarkMode} />
-          <div className="flex-1">
-            <p className={`${isDarkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
-              This is private message, between you and buddy. This chat is end to end encrypted...
-            </p>
-          </div>
-        </div>
-      </div>
       {/* AI Welcome Message */}
       <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white shadow-sm border border-gray-200'} rounded-2xl p-4`}>
         <div className="flex items-start gap-3">

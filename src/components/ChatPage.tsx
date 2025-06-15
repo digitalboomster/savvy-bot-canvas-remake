@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -29,6 +30,22 @@ const starterPrompts = [
   "I'm feeling stressed about my finances.",
   "I want to track my spending"
 ];
+
+// Local AiAvatar for the header
+const AiAvatar = () => (
+    <div
+      style={{
+        width: "47px",
+        height: "47px",
+        flexShrink: 0,
+        background:
+          "url(/lovable-uploads/1cfab2ec-5b69-4037-9238-241ebb26448f.png) lightgray -1.484px 1.295px / 108.574% 99.841% no-repeat",
+        borderRadius: "50%",
+        border: "2px solid #333",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+      }}
+    />
+);
 
 const ChatPage = () => {
   const {
@@ -82,21 +99,46 @@ const ChatPage = () => {
 
   return (
     <div className={`${themeClasses} flex flex-col`}>
-      <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-      {showWelcome && (
-        <ChatWelcome 
-          isDarkMode={isDarkMode}
-          starterPrompts={starterPrompts}
-          onPromptClick={handlePromptClick}
-        />
+      {showWelcome ? (
+        <>
+          <div className="w-full bg-[#212226] rounded-b-[32px] text-white">
+              <div className="max-w-md mx-auto h-[272px] flex flex-col">
+                  <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} isAlwaysDark />
+                  <div className="px-6 flex-grow flex flex-col justify-center">
+                      <div className="flex items-start gap-3">
+                          <AiAvatar />
+                          <div className="flex-1">
+                              <p className="mb-2">
+                                  This is private message, between you and buddy. This chat is end to end encrypted...
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div className="w-full max-w-md mx-auto relative z-10">
+            <ChatWelcome 
+              isDarkMode={isDarkMode}
+              starterPrompts={starterPrompts}
+              onPromptClick={handlePromptClick}
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={`sticky top-0 z-20 w-full bg-background/80 backdrop-blur-sm border-b ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
+            <div className='max-w-md mx-auto'>
+              <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+            </div>
+          </div>
+          <ChatMessages
+            messages={messages}
+            isAiTyping={isAiTyping}
+            isDarkMode={isDarkMode}
+            messagesEndRef={messagesEndRef}
+          />
+        </>
       )}
-
-      <ChatMessages
-        messages={messages}
-        isAiTyping={isAiTyping}
-        isDarkMode={isDarkMode}
-        messagesEndRef={messagesEndRef}
-      />
 
       <ChatFeaturesMenu
         open={showFeaturesMenu}
