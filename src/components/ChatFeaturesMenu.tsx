@@ -35,15 +35,14 @@ type Feature = {
   iconColorClass: string;
   highlighted?: boolean;
 };
-// Smart Assistant and its subfeatures
-const smartAssistantFeature: Feature = {
-  key: "smart-assistant",
-  label: "Smart Assistant",
-  icon: <IconSparkle />,
-  iconColorClass: "text-purple-500",
-};
-
+// Revert to "Capture Receipt" as main feature instead of Smart Assistant
 const features: Feature[] = [
+  {
+    key: "capture-receipt",
+    label: "Capture Receipt",
+    icon: <IconCamera />,
+    iconColorClass: "text-amber-500"
+  },
   {
     key: "documents",
     label: "My Documents",
@@ -95,29 +94,7 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
         onMouseDown={e => e.stopPropagation()}
       >
         <div className="rounded-[24px] bg-[#fffbea] border border-[#e9ddb9] shadow-2xl overflow-hidden transition-all duration-300 max-w-full min-w-[320px] relative">
-          {/* Removed X close button */}
-
           <div className="flex flex-col items-stretch px-0 pt-7 pb-4">
-            {/* Smart Assistant Feature - card style */}
-            <button
-              key={smartAssistantFeature.key}
-              className={`
-                flex items-center gap-4 w-[92%] mx-auto mb-3 px-5 py-3 text-lg font-bold transition
-                rounded-xl border border-yellow-300 bg-white shadow-sm
-                hover:shadow-md hover:bg-yellow-50 
-                focus:outline-none
-              `}
-              aria-label={smartAssistantFeature.label}
-              style={{ borderWidth: 2 }}
-              onClick={() => {
-                onClose();
-                onFeatureClick(smartAssistantFeature.key);
-              }}
-            >
-              <span className="w-7 h-7 flex items-center justify-center text-purple-500">{smartAssistantFeature.icon}</span>
-              <span className="ml-2 text-gray-900">{smartAssistantFeature.label}</span>
-            </button>
-
             <div className="flex flex-col divide-y divide-[#efe2bc] mt-1">
               {features.map((feature, i) => (
                 <button
@@ -127,17 +104,9 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
                     bg-white
                     hover:bg-yellow-50
                     text-gray-900
-                    ${i === 0 ? "rounded-t-none" : ""}
-                    ${i === features.length - 1 ? "rounded-b-none" : ""}
+                    ${i === 0 ? "rounded-t-xl" : ""}
+                    ${i === features.length - 1 ? "rounded-b-xl" : ""}
                   `}
-                  style={{
-                    borderRadius:
-                      i === 0
-                        ? "0"
-                        : i === features.length - 1
-                        ? "0 0 24px 24px"
-                        : undefined
-                  }}
                   aria-label={feature.label}
                   onClick={() => {
                     onClose();
