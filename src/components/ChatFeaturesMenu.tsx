@@ -1,8 +1,7 @@
 
 import React from "react";
-import { Upload } from "lucide-react"; // Only allowed lucide icon per project constraints
+import { Upload } from "lucide-react";
 
-// Icon SVG stubs to visually match screenshot (replace as needed)
 const IconCamera = () => (
   <svg width={24} height={24} fill="none" stroke="#FFA726" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
     <rect x={3} y={7} width={18} height={13} rx={2} /><circle cx={12} cy={13.5} r={3} /><path d="M5 7l2.5-3h9L19 7" />
@@ -29,8 +28,8 @@ type Feature = {
   label: string;
   icon: React.ReactNode;
   onClick?: () => void;
-  iconColorClass: string; // Used for accessibility
-  highlighted?: boolean; // For yellow highlight
+  iconColorClass: string;
+  highlighted?: boolean;
 };
 
 const features: Feature[] = [
@@ -65,7 +64,6 @@ const features: Feature[] = [
     iconColorClass: "text-green-500",
     highlighted: true
   }
-  // 'Smart Assistant' omitted as per your instructions
 ];
 
 interface ChatFeaturesMenuProps {
@@ -82,48 +80,56 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
 }) => {
   if (!open) return null;
   return (
-    <div 
-      className={`fixed left-6 bottom-32 z-50 drop-shadow-xl`}
-      style={{ minWidth: 260 }}
-      tabIndex={-1}
-      onMouseDown={e => e.stopPropagation()}
-    >
-      <div className={`rounded-2xl bg-white border border-yellow-300 shadow-2xl overflow-hidden animate-fade-in ${className}`}>
-        <div className="py-2">
-          {features.map((feature, i) => (
-            <button
-              key={feature.key}
-              className={`flex items-center gap-3 w-full px-6 py-3 text-[1.08rem] font-semibold focus:outline-none transition
-                ${
-                  feature.highlighted
-                    ? 'bg-yellow-50'
-                    : 'bg-white'
-                }
-                ${i !== 0 ? "border-t border-yellow-100" : ""}
-                hover:bg-yellow-100
-                text-gray-900
-              `}
-              style={{
-                borderRadius:
-                  i === 0
-                    ? "16px 16px 0 0"
-                    : i === features.length - 1
-                    ? "0 0 16px 16px"
-                    : undefined
-              }}
-              aria-label={feature.label}
-              onClick={() => {
-                onClose();
-                onFeatureClick(feature.key);
-              }}
-            >
-              <span className={"w-6 h-6 flex items-center justify-center"}>{feature.icon}</span>
-              <span className="ml-2">{feature.label}</span>
-            </button>
-          ))}
+    <>
+      <div 
+        className={`fixed left-6 bottom-32 z-50 animate-fade-in ${className}`}
+        style={{ minWidth: 288, maxWidth: 350 }}
+        tabIndex={-1}
+        onMouseDown={e => e.stopPropagation()}
+      >
+        <div className={`
+          rounded-3xl
+          bg-[#fffbea]
+          border border-[#e9ddb9]
+          shadow-lg
+          overflow-hidden
+          transition-all
+          duration-300
+        `}>
+          <div className="divide-y divide-[#efe2bc]">
+            {features.map((feature, i) => (
+              <button
+                key={feature.key}
+                className={`
+                  flex items-center gap-3 w-full px-6 py-4 text-[1.09rem] font-semibold focus:outline-none transition
+                  ${feature.highlighted ? 'bg-yellow-100/90' : 'bg-transparent'}
+                  hover:bg-yellow-200/90
+                  text-gray-800
+                  ${i === 0 ? "rounded-t-2xl" : ""}
+                  ${i === features.length - 1 ? "rounded-b-2xl" : ""}
+                `}
+                style={{
+                  borderRadius:
+                    i === 0
+                      ? "24px 24px 0 0"
+                      : i === features.length - 1
+                      ? "0 0 24px 24px"
+                      : undefined
+                }}
+                aria-label={feature.label}
+                onClick={() => {
+                  onClose();
+                  onFeatureClick(feature.key);
+                }}
+              >
+                <span className={"w-7 h-7 flex items-center justify-center"}>{feature.icon}</span>
+                <span className="ml-2">{feature.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
-      {/* Transparent overlay for outside click */}
+      {/* Overlay for outside click */}
       <button
         className="fixed inset-0 z-40"
         tabIndex={-1}
@@ -131,7 +137,7 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
         style={{ background: "transparent", pointerEvents: "auto" }}
         onClick={onClose}
       />
-    </div>
+    </>
   );
 };
 

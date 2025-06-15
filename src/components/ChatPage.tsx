@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ChatFeaturesMenu from './ChatFeaturesMenu';
@@ -6,6 +5,7 @@ import ChatHeader from './ChatHeader';
 import ChatWelcome from './ChatWelcome';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
+import DocumentViewerModal from './DocumentViewerModal';
 
 // Message type
 interface Message {
@@ -16,13 +16,15 @@ interface Message {
 }
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [inputText, setInputText] = useState('');
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [featuresRotated, setFeaturesRotated] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
+  const [showDocsViewer, setShowDocsViewer] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -46,10 +48,15 @@ const ChatPage = () => {
     }
   }, [messages, location.state]);
 
+  // Rotation effect for features btn in sync with menu open/close
+  useEffect(() => {
+    setFeaturesRotated(showFeaturesMenu);
+  }, [showFeaturesMenu]);
+
   const handleSendMessage = (text: string) => {
     if (!text.trim()) return;
 
-    const userMessage: Message = {
+    const userMessage = {
       id: Date.now().toString(),
       text: text.trim(),
       isUser: true,
@@ -61,9 +68,8 @@ const ChatPage = () => {
     setShowWelcome(false);
     setIsAiTyping(true);
 
-    // Simulate AI response
     setTimeout(() => {
-      const aiMessage: Message = {
+      const aiMessage = {
         id: (Date.now() + 1).toString(),
         text: getAiResponse(text),
         isUser: false,
@@ -115,8 +121,10 @@ const ChatPage = () => {
 
   // Handler for feature menu feature click
   const handleFeatureSelect = (featureKey: string) => {
-    // handle feature select here (e.g. modals, navigation, etc)
-    console.log(`Feature selected: ${featureKey}`);
+    if (featureKey === "documents") {
+      setShowDocsViewer(true);
+    }
+    // ... Optionally handle other features
   };
 
   return (
@@ -145,6 +153,9 @@ const ChatPage = () => {
         onClose={() => setShowFeaturesMenu(false)}
         onFeatureClick={handleFeatureSelect}
       />
+
+      {/* Document Viewer Modal */}
+      <DocumentViewerModal open={showDocsViewer} onClose={() => setShowDocsViewer(false)} />
 
       {/* Input Area */}
       <ChatInput
