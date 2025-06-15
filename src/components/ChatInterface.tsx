@@ -73,7 +73,7 @@ const ChatInterface = () => {
 
   return (
     <div className={`${themeClasses} min-h-screen`}>
-      <div className="relative w-full" style={{ height: '319px' }}>
+      <div className="relative w-full h-72 md:h-80">
         <div 
             className="absolute inset-0"
             style={{
@@ -108,12 +108,12 @@ const ChatInterface = () => {
             </div>
             {/* Greeting */}
             <div className="w-full px-4 flex-grow flex flex-col justify-center">
-              <div className="mb-8 mt-2">
-                <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
                   Hi There 
                   <span className="animate-bounce">👋</span>
                 </h2>
-                <p className={`leading-relaxed`}>
+                <p className={`leading-relaxed text-base`}>
                   Hey There! Welcome to Savvy Bot. I have a response to every message, thoughts. So feel to ask anything!
                 </p>
               </div>
@@ -122,7 +122,7 @@ const ChatInterface = () => {
       </div>
       
       {/* Content in centralized container */}
-      <div className="w-full max-w-md mx-auto px-4 relative z-10" style={{ marginTop: '-6rem' }}>
+      <div className="w-full max-w-md mx-auto px-4 relative z-10 -mt-16 md:-mt-20">
         {/* Conversation Starter */}
         <div className="bg-yellow-400 p-6 rounded-2xl mb-8 shadow-xl transform hover:scale-105 transition-transform duration-200">
           <h3 className="text-black font-semibold mb-4 text-lg">Start Conversation</h3>
@@ -149,20 +149,11 @@ const ChatInterface = () => {
         {/* Monthly Reports */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Monthly Reports</h3>
-          <div className="grid grid-cols-2 gap-4">
             <Card className="text-center shadow-md">
                 <CardContent className="p-4 flex flex-col justify-center items-center">
-                    <p className="text-2xl font-bold">54256</p>
-                    <p className="text-sm text-muted-foreground mt-1">Message Sent</p>
+                    <p className="text-lg font-medium text-muted-foreground">Coming Soon</p>
                 </CardContent>
             </Card>
-            <Card className="text-center shadow-md">
-                <CardContent className="p-4 flex flex-col justify-center items-center">
-                    <p className="text-2xl font-bold">49823</p>
-                    <p className="text-sm text-muted-foreground mt-1">Message Receive</p>
-                </CardContent>
-            </Card>
-          </div>
         </div>
         
         {/* Recent Conversations */}
