@@ -44,7 +44,7 @@ const ChatWelcome: React.FC<ChatWelcomeProps> = ({
           <button
             key={index}
             onClick={() => onPromptClick(prompt)}
-            className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 text-left transition-all duration-200 text-sm`}
+            className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 text-left transition-all duration-200 text-sm hover:-translate-y-1`}
           >
             {prompt}
           </button>

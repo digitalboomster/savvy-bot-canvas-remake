@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { X, MoreVertical, MessageCircle, Trash2, ChevronLeft, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -124,7 +125,7 @@ const ChatInterface = () => {
       {/* Content in centralized container */}
       <div className="w-full max-w-md mx-auto px-4 relative z-10 -mt-12 md:-mt-16">
         {/* Conversation Starter */}
-        <div className="bg-yellow-400 p-6 rounded-2xl mb-8 shadow-xl transform hover:scale-105 transition-transform duration-200">
+        <div className="bg-yellow-400 p-6 rounded-2xl mb-8 shadow-xl transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
           <h3 className="text-black font-semibold mb-4 text-lg">Start Conversation</h3>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-black/20 rounded-full flex items-center justify-center">

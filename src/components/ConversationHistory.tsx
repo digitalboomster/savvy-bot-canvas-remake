@@ -51,10 +51,11 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
         )}
       </div>
       <div className="space-y-3">
-        {conversations.map((conversation) => (
+        {conversations.map((conversation, index) => (
           <div 
             key={conversation.id}
-            className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 transition-all duration-200 cursor-pointer group relative`}
+            className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 transition-all duration-200 cursor-pointer group relative animate-in fade-in-0`}
+            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
             onTouchStart={() => handleLongPress(conversation.id)}
             onMouseDown={() => handleLongPress(conversation.id)}
           >

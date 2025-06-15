@@ -103,7 +103,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           <Plus size={20} className={isDarkMode ? "text-gray-300" : "text-gray-600"} />
         </button>
         {/* Input */}
-        <div className={`flex-1 flex items-center ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-full px-4 py-2`}>
+        <div className={`flex-1 flex items-center ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-full px-4 py-2 transition-all duration-200 focus-within:ring-2 ${isDarkMode ? 'focus-within:ring-blue-400/70' : 'focus-within:ring-blue-500/70'}`}>
           <input
             type="text"
             value={inputText}

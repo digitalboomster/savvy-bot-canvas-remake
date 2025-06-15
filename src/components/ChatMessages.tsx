@@ -33,7 +33,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         return (
           <div
             key={message.id}
-            className={`flex items-end ${message.isUser ? 'justify-end' : 'justify-start'} gap-2`}
+            className={`flex items-end ${message.isUser ? 'justify-end' : 'justify-start'} gap-2 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 ease-out`}
           >
             {/* Avatar on left for AI */}
             {!message.isUser && (
