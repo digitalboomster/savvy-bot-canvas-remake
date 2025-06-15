@@ -1,40 +1,18 @@
 
 import React, { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Trash2, CheckSquare, X, ChevronDown } from "lucide-react";
+import { Trash2, CheckSquare, ChevronDown } from "lucide-react";
 
-type DocType = "Note" | "PDF" | "Scan";
+// Removed: type DocType, since type is unused now.
 type Document = {
   id: number;
   name: string;
   added: Date;
-  type: DocType;
+  type: string;
   previewImg?: string;
 };
 
-const initialMockDocs: Document[] = [
-  {
-    id: 1,
-    name: "Roadmap",
-    added: new Date("2024-05-05"),
-    type: "Note",
-    previewImg: "/lovable-uploads/542b0725-969c-413d-a578-6a0798e82e14.png",
-  },
-  {
-    id: 2,
-    name: "Finance Plan",
-    added: new Date("2024-05-07"),
-    type: "Note",
-    previewImg: "/lovable-uploads/542b0725-969c-413d-a578-6a0798e82e14.png",
-  },
-  {
-    id: 3,
-    name: "Scan_0001",
-    added: new Date("2024-05-09"),
-    type: "Scan",
-    previewImg: "/lovable-uploads/542b0725-969c-413d-a578-6a0798e82e14.png",
-  },
-];
+const initialMockDocs: Document[] = []; // No mock docs
 
 interface DocumentViewerModalProps {
   open: boolean;
@@ -52,12 +30,12 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
 
   React.useEffect(() => {
     if (open) {
-      setDocs(initialMockDocs);
+      setDocs(initialMockDocs); // Will be []
       setSelected([]);
     }
   }, [open]);
 
-  // Sorting logic
+  // Sorting logic (will just return [] if docs empty)
   const displayDocs = [...docs].sort((a, b) => {
     if (sortBy === "date") return b.added.getTime() - a.added.getTime();
     if (sortBy === "type") return a.type.localeCompare(b.type) || b.added.getTime() - a.added.getTime();
@@ -83,12 +61,11 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
         <span className="sr-only">
           <span id="my-documents-modal-title">My Documents</span>
         </span>
-        {/* Header (remove custom close button) */}
+        {/* Header */}
         <div className="flex flex-row items-center justify-between px-7 pt-6 pb-3 border-b border-[#efe2bc] bg-[#fffbea]">
           <span className="font-bold text-lg text-gray-800" id="my-documents-modal-title">
             My Documents
           </span>
-          {/* The custom close button was REMOVED to avoid duplicate 'X' */}
         </div>
 
         {/* Controls */}
@@ -192,8 +169,10 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
             </div>
           ))}
           {displayDocs.length === 0 && (
-            <div className="text-center text-gray-400 col-span-2">
-              No documents
+            <div className="flex flex-col items-center justify-center text-center w-full col-span-2 min-h-[180px]">
+              <span className="text-3xl mb-2" role="img" aria-label="Empty">📄</span>
+              <span className="text-lg font-medium text-gray-500">No documents yet</span>
+              <span className="text-sm text-gray-400 mt-1">Upload or create documents, and they’ll show up here.</span>
             </div>
           )}
         </div>
