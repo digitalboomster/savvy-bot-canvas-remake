@@ -1,4 +1,3 @@
-
 import React, { useRef, useState } from "react";
 import { Plus, Mic } from "lucide-react";
 
@@ -13,11 +12,9 @@ interface ChatInputProps {
 
 // Utility to check if SpeechRecognition is available
 function getSpeechRecognition() {
-  // @ts-ignore
   return (
-    window.SpeechRecognition ||
-    // @ts-ignore
-    window.webkitSpeechRecognition ||
+    (window as any).SpeechRecognition ||
+    (window as any).webkitSpeechRecognition ||
     null
   );
 }
@@ -59,7 +56,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
       let finalTranscript = "";
 
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
+      recognition.onresult = (event: any) => {
         let interimTranscript = "";
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
@@ -148,4 +145,3 @@ const ChatInput: React.FC<ChatInputProps> = ({
 };
 
 export default ChatInput;
-
