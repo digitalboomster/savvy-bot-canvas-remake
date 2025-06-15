@@ -110,6 +110,7 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
       <div
         className="fixed inset-0 z-40 bg-black/60 animate-fade-in transition-opacity"
         style={{
+          // support both dark and light mode
           backdropFilter: 'blur(2px)',
           WebkitBackdropFilter: 'blur(2px)'
         }}
@@ -127,28 +128,18 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
         tabIndex={-1}
         onMouseDown={e => e.stopPropagation()}
       >
-        {/* glassy, modern container */}
-        <div className="
-          rounded-[32px]
-          bg-white/60 dark:bg-[#1d2631]/60
-          border border-white/20 dark:border-white/10
-          shadow-2xl
-          backdrop-blur-xl
-          ring-1 ring-white/40 dark:ring-white/10
-          overflow-hidden
-          transition-all duration-300
-          max-w-full min-w-[300px] relative
-        ">
+        <div className="rounded-[32px] bg-white border border-neutral-100 shadow-2xl overflow-hidden transition-all duration-300 max-w-full min-w-[300px] relative">
           <div className="flex flex-col items-stretch px-0 pt-7 pb-4">
             <div className="flex flex-col gap-0">
               {features.map((feature, i) => (
                 <button
                   key={feature.key}
                   className={`
-                    group flex items-center gap-4 w-full px-7 py-3 text-base font-medium focus:outline-none transition 
-                    bg-transparent border-0 text-gray-900 dark:text-white relative overflow-hidden
-                    hover:scale-[1.033] active:scale-[0.98]
-                    hover:z-10
+                    flex items-center gap-4 w-full px-7 py-3 text-base font-medium focus:outline-none transition bg-transparent
+                    border-0
+                    hover:bg-neutral-50
+                    text-gray-900
+                    rounded-none
                     ${i === 0 ? "rounded-t-2xl" : ""}
                     ${i === features.length - 1 ? "rounded-b-2xl" : ""}
                   `}
@@ -160,46 +151,16 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
                   style={{
                     fontFamily: "Inter, Arial, sans-serif",
                     fontWeight: 500,
-                    fontSize: "1.14rem",
+                    fontSize: "1.14rem"
                   }}
                 >
-                  {/* feature bg glass hover */}
                   <span
-                    aria-hidden="true"
-                    className="
-                      absolute inset-0 z-0 pointer-events-none
-                      bg-white/20 dark:bg-white/10
-                      opacity-0 group-hover:opacity-100
-                      transition-opacity duration-200
-                    "
-                  />
-                  {/* subtle border animation */}
-                  <span
-                    aria-hidden="true"
-                    className="
-                      absolute left-0 top-0 w-full h-full z-0 pointer-events-none
-                      rounded-2xl border-2 border-yellow-300/0 group-hover:border-yellow-300/15
-                      transition-all duration-300
-                    "
-                  />
-
-                  {/* icon circle with subtle glass effect */}
-                  <span
-                    className={`
-                      w-12 h-12 flex items-center justify-center rounded-full 
-                      shadow-md
-                      border ${feature.iconBgClass} ${feature.iconBorder}
-                      bg-white/70 dark:bg-white/10
-                      ring-1 ring-black/5 dark:ring-white/10
-                      backdrop-blur-sm
-                      transition-all duration-300
-                      group-hover:shadow-lg group-hover:bg-white/85 dark:group-hover:bg-white/20
-                    `}
-                    style={{ backgroundClip: 'padding-box' }}
+                    className={`w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-sm border ${feature.iconBgClass} ${feature.iconBorder}`}
+                    style={{ backgroundClip: 'padding-box', transition: "box-shadow .18s" }}
                   >
                     {feature.icon}
                   </span>
-                  <span className="ml-2 relative z-10">{feature.label}</span>
+                  <span className="ml-2">{feature.label}</span>
                 </button>
               ))}
             </div>
