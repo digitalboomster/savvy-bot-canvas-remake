@@ -1,4 +1,3 @@
-
 import React, { RefObject } from "react";
 
 interface Message {
@@ -15,34 +14,47 @@ interface ChatMessagesProps {
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({
-  messages, isAiTyping, isDarkMode, messagesEndRef
+  messages,
+  isAiTyping,
+  isDarkMode,
+  messagesEndRef,
 }) => {
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
       {messages.map((message) => (
         <div
           key={message.id}
-          className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+          className={`flex items-end ${message.isUser ? 'justify-end' : 'justify-start'} gap-2`}
         >
-          <div className="flex items-start gap-3 max-w-[80%]">
-            {!message.isUser && (
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-                <span className="text-lg">🤖</span>
-              </div>
-            )}
+          {/* Avatar on left for AI */}
+          {!message.isUser && (
             <div
-              className={`px-4 py-3 rounded-2xl ${
-                message.isUser
-                  ? isDarkMode 
-                    ? 'bg-gray-700 text-white ml-auto'
-                    : 'bg-blue-500 text-white ml-auto'
-                  : isDarkMode 
-                    ? 'bg-gray-100 text-gray-800'
-                    : 'bg-white text-gray-800 border border-gray-200'
-              }`}
-            >
-              <p className="text-sm">{message.text}</p>
-            </div>
+              style={{
+                width: "47px",
+                height: "47px",
+                flexShrink: 0,
+                background: "url(/lovable-uploads/1cfab2ec-5b69-4037-9238-241ebb26448f.png) lightgray -1.484px 1.295px / 108.574% 99.841% no-repeat",
+                borderRadius: "50%",
+                border: isDarkMode ? "2px solid #333" : "2px solid #fff",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+              }}
+            />
+          )}
+          {/* Message bubble */}
+          <div
+            className={`max-w-[65%] px-4 py-3 rounded-[18px] ${
+              message.isUser
+                ? "bg-yellow-400 text-black ml-auto"
+                : isDarkMode
+                  ? "bg-gray-800 text-white"
+                  : "bg-white text-black border border-gray-200"
+            }`}
+            style={{
+              borderTopLeftRadius: !message.isUser ? 6 : 18,
+              borderTopRightRadius: message.isUser ? 6 : 18,
+            }}
+          >
+            {message.text}
           </div>
         </div>
       ))}
