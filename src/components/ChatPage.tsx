@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Mic, Plus, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Mic, Plus, MoreVertical, ChevronLeft } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from './ui/dropdown-menu';
 import { useTheme } from '../context/ThemeContext';
