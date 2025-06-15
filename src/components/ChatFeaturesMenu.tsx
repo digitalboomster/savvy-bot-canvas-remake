@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Camera, Upload } from "lucide-react";
 
@@ -21,19 +20,6 @@ const IconAnalyse = () => (
   <svg width={24} height={24} fill="none" viewBox="0 0 24 24">
     <rect x={7} y={2} width={10} height={20} rx={5} stroke="#4264FF" strokeWidth={2}/>
     <path d="M12 7v5m0 0h-3m3 0h3" stroke="#4264FF" strokeWidth={2} strokeLinecap="round"/>
-  </svg>
-);
-// Smart Assistant
-const IconSmartAssistant = () => (
-  <svg width={24} height={24} fill="none" viewBox="0 0 24 24">
-    <g stroke="#FFB13B" strokeWidth={2}>
-      <circle cx="12" cy="12" r="9" opacity="0.3"/>
-      <path d="M8 16h4v-2m0 0V8m0 6h4" strokeLinecap="round" strokeLinejoin="round"/>
-    </g>
-    <circle cx="12" cy="12" r="4" fill="none"/>
-    <circle cx="12" cy="12" r="9" fill="none"/>
-    <circle cx="12" cy="12" r="4" fill="none"/>
-    <circle cx="12" cy="12" r="4" fill="none"/>
   </svg>
 );
 
@@ -80,13 +66,6 @@ const features: Feature[] = [
     icon: <Upload size={20} color="#1DD75B" strokeWidth={2.2} />,
     iconBgClass: "bg-green-100",
     iconBorder: "border-green-200"
-  },
-  {
-    key: "smart-assistant",
-    label: "Smart Assistant",
-    icon: <IconSmartAssistant />,
-    iconBgClass: "bg-amber-100",
-    iconBorder: "border-amber-200"
   }
 ];
 
@@ -180,4 +159,3 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
 };
 
 export default ChatFeaturesMenu;
-
