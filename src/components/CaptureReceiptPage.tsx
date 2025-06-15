@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from "react";
-import { ArrowLeft, Camera, Upload } from "lucide-react";
+import { ChevronLeft, Camera, Upload } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import ReceiptCameraFrame from "./ReceiptCameraFrame";
@@ -72,7 +72,7 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
           className={`p-2 rounded-lg transition-colors duration-200 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'}`}
           aria-label="Back"
         >
-          <ArrowLeft size={22} className={isDarkMode ? "text-gray-300" : "text-neutral-950"} />
+          <ChevronLeft size={22} className={isDarkMode ? "text-gray-300" : "text-neutral-950"} />
         </button>
         <h1 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white text-center flex-1">Capture Receipt</h1>
         <span className="block w-[40px] h-[28px]" />

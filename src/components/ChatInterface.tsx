@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, MoreVertical, MessageCircle, Trash2, ArrowLeft, Sun, Moon } from 'lucide-react';
+import { X, MoreVertical, MessageCircle, Trash2, ChevronLeft, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ConversationHistory from './ConversationHistory';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -80,7 +80,7 @@ const ChatInterface = () => {
           onClick={() => navigate('/')}
           className={`p-2 rounded-lg transition-colors duration-200 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'}`}
         >
-          <ArrowLeft size={22} className={isDarkMode ? "text-gray-300" : "text-neutral-950"} />
+          <ChevronLeft size={22} className={isDarkMode ? "text-gray-300" : "text-neutral-950"} />
         </button>
         <h1 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white text-center flex-1">Savvy Bot</h1>
         <div className="flex items-center gap-2">

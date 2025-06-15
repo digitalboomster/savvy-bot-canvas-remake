@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { ArrowLeft, Moon, Sun, Ellipsis } from 'lucide-react';
+import { ChevronLeft, Moon, Sun, Ellipsis } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface ChatHeaderProps {
@@ -15,7 +16,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isDarkMode, toggleTheme }) => {
         onClick={() => navigate('/')}
         className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
       >
-        <ArrowLeft size={24} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
+        <ChevronLeft size={24} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
       </button>
       <h1 className="text-xl font-semibold">Savvy Bot</h1>
       <div className="flex items-center gap-2">
@@ -43,3 +44,4 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ isDarkMode, toggleTheme }) => {
 };
 
 export default ChatHeader;
+
