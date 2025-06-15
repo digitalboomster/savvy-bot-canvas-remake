@@ -93,10 +93,6 @@ const ChatPage = () => {
     handleSendMessage(prompt);
   };
 
-  const handleFeaturesClick = () => {
-    setFeaturesRotated(!featuresRotated);
-  };
-
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -246,7 +242,10 @@ const ChatPage = () => {
       {/* Features Floating Menu */}
       <ChatFeaturesMenu
         open={showFeaturesMenu}
-        onClose={() => setShowFeaturesMenu(false)}
+        onClose={() => {
+          setShowFeaturesMenu(false);
+          setFeaturesRotated(false);
+        }}
         onFeatureClick={handleFeatureSelect}
       />
 
@@ -255,7 +254,12 @@ const ChatPage = () => {
         <div className="flex items-center gap-3">
           {/* Features Button (Cross/Plus that rotates) */}
           <button
-            onClick={() => setShowFeaturesMenu(v => !v)}
+            onClick={() => {
+              setShowFeaturesMenu((open) => {
+                setFeaturesRotated(!open ? true : false);
+                return !open;
+              });
+            }}
             className={`p-3 ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-full transition-all duration-200 ${
               featuresRotated ? 'rotate-45' : ''
             }`}
