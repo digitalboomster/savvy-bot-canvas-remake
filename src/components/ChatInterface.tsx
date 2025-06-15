@@ -35,9 +35,9 @@ const ChatInterface = () => {
         },
         {
           id: '2',
-          title: 'Analysis on your Budget',
+          title: 'Budget Analysis',
           timestamp: '2d ago',
-          preview: 'Please analyze my monthly expenses'
+          preview: 'Please analyze my monthly expenses.'
         }
       ];
       setConversations(defaultConversations);
@@ -55,7 +55,7 @@ const ChatInterface = () => {
       id: Date.now().toString(),
       title: 'New Conversation',
       timestamp: 'now',
-      preview: 'Started a new conversation with Savvy Bot'
+      preview: 'Started a new conversation with Savvy Bot.'
     };
     const updatedConversations = [newConversation, ...conversations];
     setConversations(updatedConversations);
@@ -110,11 +110,11 @@ const ChatInterface = () => {
             <div className="w-full px-4 flex-grow flex flex-col justify-center">
               <div className="mb-4">
                 <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                  Hi There 
+                  Hi there 
                   <span className="animate-bounce">👋</span>
                 </h2>
                 <p className={`leading-relaxed text-base`}>
-                  Hey There! Welcome to Savvy Bot. I have a response to every message, thoughts. So feel to ask anything!
+                  Welcome to Savvy Bot. Feel free to ask me anything about your finances!
                 </p>
               </div>
             </div>
@@ -131,7 +131,7 @@ const ChatInterface = () => {
               <MessageCircle size={20} className="text-black" />
             </div>
             <div>
-              <p className="text-black font-medium">Savvy Usual Reply Time</p>
+              <p className="text-black font-medium">Typical Reply Time</p>
               <p className="text-black/70 text-sm flex items-center gap-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 2 Min
@@ -142,7 +142,7 @@ const ChatInterface = () => {
             onClick={handleStartConversation}
             className="w-full bg-white text-black font-medium py-3 px-4 rounded-xl hover:bg-gray-100 transition-colors duration-200 shadow-lg"
           >
-            Send Message to Savvy
+            Send a Message
           </button>
         </div>
         
@@ -151,7 +151,7 @@ const ChatInterface = () => {
           <h3 className="text-lg font-semibold mb-4">Monthly Reports</h3>
             <Card className="text-center shadow-md">
                 <CardContent className="p-4 flex flex-col justify-center items-center">
-                    <p className="text-lg font-medium text-muted-foreground">Coming Soon</p>
+                    <p className="text-lg font-medium text-muted-foreground">Coming soon</p>
                 </CardContent>
             </Card>
         </div>

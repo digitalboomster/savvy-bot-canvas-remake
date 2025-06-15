@@ -25,10 +25,10 @@ interface Message {
 const BACKEND_URL = "https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev";
 
 const starterPrompts = [
-  "How can I start saving money",
-  "Help me create a Budget", 
+  "How can I start saving money?",
+  "Help me create a budget.",
   "I'm feeling stressed about my finances.",
-  "I want to track my spending"
+  "I want to track my spending."
 ];
 
 // Local AiAvatar for the header

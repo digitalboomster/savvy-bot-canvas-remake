@@ -69,7 +69,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       };
 
       recognition.onerror = (event: any) => {
-        setRecognitionError("Mic error: " + (event.error || "unknown error"));
+        setRecognitionError(`Mic error: ${event.error || "Unknown error"}.`);
         setIsRecording(false);
         setLoadingTranscript(false);
       };
@@ -109,7 +109,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && onSend(inputText)}
-            placeholder={loadingTranscript ? "Transcribing..." : "Message to Savvy..."}
+            placeholder={loadingTranscript ? "Transcribing..." : "Message Savvy..."}
             disabled={loadingTranscript}
             className={`flex-1 bg-transparent ${isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'} outline-none px-2`}
           />
@@ -137,7 +137,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       )}
       {isRecording && (
         <div className="mt-2 text-xs text-yellow-700 dark:text-yellow-200 animate-pulse">
-          Listening... Speak now and tap mic to stop.
+          Listening... Tap the mic again to stop.
         </div>
       )}
     </div>

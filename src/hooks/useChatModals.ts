@@ -34,7 +34,7 @@ export function useChatModals() {
       });
       if (!response.ok) throw new Error("Mood check-in failed");
       toast({
-        title: "Mood logged",
+        title: "Mood Logged",
         description: `Your mood (${mood}) has been recorded.`
       });
     } catch (error) {
