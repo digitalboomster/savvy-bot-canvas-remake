@@ -21,17 +21,17 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent
-        className="max-w-sm p-0 rounded-2xl overflow-hidden shadow-2xl border-none"
+        className="max-w-md w-full p-0 rounded-2xl overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 transition-colors duration-300"
         style={{ borderRadius: 24 }}
       >
-        {/* HEADER */}
-        <div className="bg-yellow-400 flex items-center justify-center px-5 py-4 text-center relative" style={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
-          <span className="text-lg font-bold w-full">Bee Counsellor</span>
-          {/* Removed custom close button. Only shadcn/ui DialogContent's close button will be shown */}
+        {/* Header matching chat style */}
+        <div className="flex items-center justify-between px-4 py-4 border-b border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-md">
+          <span className="text-lg font-black text-gray-900 dark:text-white flex-1 text-center">Bee Counsellor</span>
+          {/* Close button maintains as handled by DialogContent */}
         </div>
-        {/* PROMPT */}
-        <div className="px-8 pt-7 pb-2 text-center bg-white rounded-b-2xl">
-          <h2 className="text-lg font-semibold mb-5 text-gray-900">How are you feeling?</h2>
+        {/* Prompt & content */}
+        <div className="px-8 pt-7 pb-8 text-center bg-white dark:bg-gray-900 rounded-b-2xl">
+          <h2 className="text-lg font-semibold mb-5 text-gray-900 dark:text-white">How are you feeling?</h2>
           <div className="grid grid-cols-2 gap-4">
             {moodOptions.map(({ key, label, img }) => (
               <button
@@ -57,3 +57,4 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
 };
 
 export default HealMeModal;
+

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
@@ -14,19 +13,19 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent
-        className="max-w-sm p-0 rounded-[24px] border border-[#e9ddb9] bg-[#fffbea] shadow-2xl overflow-hidden"
+        className="max-w-md w-full p-0 rounded-2xl overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 transition-colors duration-300"
         style={{ borderRadius: 24 }}
       >
-        {/* Title, subtle and centered like the feature panel, no yellow header bar */}
-        <div className="flex flex-col items-center justify-center pt-7 pb-2">
-          <span className="text-lg font-bold text-gray-900">My Documents</span>
+        {/* Header style matching chat */}
+        <div className="flex flex-col items-center justify-center pt-7 pb-2 border-b border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-md">
+          <span className="text-lg font-black text-gray-900 dark:text-white">My Documents</span>
         </div>
         {/* Divider to mirror features panel */}
         <div className="w-full h-[1px] bg-[#efe2bc] mb-0" />
-        {/* Body with "No documents yet" layout and color */}
-        <div className="p-8 flex flex-col items-center justify-center text-center w-full min-h-[215px] bg-white rounded-b-2xl">
+        {/* Body with "No documents yet" */}
+        <div className="p-8 flex flex-col items-center justify-center text-center w-full min-h-[215px] bg-white dark:bg-gray-900 rounded-b-2xl">
           <span className="text-3xl mb-2" role="img" aria-label="Empty">📄</span>
-          <span className="text-lg font-medium text-gray-600">No documents yet</span>
+          <span className="text-lg font-medium text-gray-600 dark:text-gray-300">No documents yet</span>
           <span className="text-sm text-gray-400 mt-1">
             Upload or create documents, and they’ll show up here.
           </span>

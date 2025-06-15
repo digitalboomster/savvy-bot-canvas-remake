@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from "react";
 import { ArrowLeft, Camera, Upload } from "lucide-react";
 
@@ -58,27 +57,26 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-gray-100 via-white to-gray-50 text-gray-900">
-      {/* Header - same as ChatPage */}
-      <div className="w-full max-w-md flex items-center justify-between px-1 py-4 border-b border-black/10">
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-gray-100 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-black text-gray-900 dark:text-white transition-colors duration-300">
+      {/* Unified header to match chat */}
+      <div className="w-full max-w-md flex items-center justify-between px-1 py-4 border-b border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-md shadow-sm">
         <button
           onClick={onBack}
-          className="p-2 rounded-full hover:bg-neutral-200 transition"
+          className="p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition"
           aria-label="Back"
         >
-          <ArrowLeft size={22} className="text-neutral-950" />
+          <ArrowLeft size={22} className="text-neutral-950 dark:text-gray-300" />
         </button>
-        <h1 className="text-xl font-black tracking-tight text-neutral-900 text-center flex-1">Capture Receipt</h1>
+        <h1 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white text-center flex-1">Capture Receipt</h1>
         <span className="block w-[40px] h-[28px]" />
       </div>
       {/* Main container */}
-      <div className="w-full flex flex-col items-center mt-8 px-2">
-        <div
-          className="relative rounded-[22px] flex items-center justify-center overflow-visible shadow-lg"
+      <main className="w-full flex flex-col items-center mt-8 px-4">
+        <section
+          className="relative rounded-2xl flex items-center justify-center overflow-visible shadow-xl border border-black/10 dark:border-white/10 bg-[#181818]/90 dark:bg-black mb-8"
           style={{
             width: FRAME_WIDTH,
             height: FRAME_HEIGHT,
-            background: "#111",
           }}
         >
           {/* Yellow Corner SVGs */}
@@ -129,9 +127,9 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
               </div>
             )}
           </div>
-        </div>
+        </section>
         {/* Action Buttons */}
-        <div className="w-full max-w-xs flex flex-col gap-3 mt-8">
+        <div className="w-full max-w-xs flex flex-col gap-3">
           <button
             className="flex items-center justify-center gap-2 w-full h-12 rounded-xl border-2 border-yellow-400 bg-yellow-300 hover:bg-yellow-200 text-black font-bold text-lg shadow transition active:scale-98"
             aria-label="Capture Receipt"
@@ -148,7 +146,7 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
             Upload from gallery
           </button>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
