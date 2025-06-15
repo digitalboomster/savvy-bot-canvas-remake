@@ -7,6 +7,7 @@ import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import DocumentViewerModal from './DocumentViewerModal';
 import HealMeModal from "./HealMeModal";
+import CaptureReceiptPage from "./CaptureReceiptPage";
 
 // Message type
 interface Message {
@@ -26,6 +27,7 @@ const ChatPage = () => {
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const [showDocsViewer, setShowDocsViewer] = useState(false);
   const [showHealMe, setShowHealMe] = useState(false);
+  const [showCaptureReceipt, setShowCaptureReceipt] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -124,18 +126,7 @@ const ChatPage = () => {
   // Handler for features menu option click
   const handleFeatureSelect = (featureKey: string) => {
     if (featureKey === "capture-receipt") {
-      // Restore the original intended action - (for now, can just send a message or prepare for future modal)
-      setMessages(prev => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          text: "Feature coming soon: Capture Receipt 📸",
-          isUser: false,
-          timestamp: new Date()
-        }
-      ]);
-      setShowWelcome(false);
-      setIsAiTyping(false);
+      setShowCaptureReceipt(true);
       setShowFeaturesMenu(false);
       return;
     }
@@ -159,6 +150,15 @@ const ChatPage = () => {
     setShowDocsViewer(false);
     setShowFeaturesMenu(true);
   };
+
+  // Render capture receipt full page if activated
+  if (showCaptureReceipt) {
+    return (
+      <CaptureReceiptPage
+        onBack={() => setShowCaptureReceipt(false)}
+      />
+    );
+  }
 
   return (
     <div className={`${themeClasses} flex flex-col`}>
