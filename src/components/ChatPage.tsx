@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, Mic, Plus, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Mic, Plus, MoreVertical } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from './ui/dropdown-menu';
 import { useTheme } from '../context/ThemeContext';
-import ChatHeader from './ChatHeader';
 
 interface Message {
   id: string;
@@ -122,7 +121,7 @@ const ChatPage = () => {
               <MoreVertical size={24} className={isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className={isDark ? "bg-gray-900 text-white border-gray-700 z-50" : "bg-white text-gray-900 border-gray-200 z-50"}>
+          <DropdownMenuContent align="end" className={isDark ? "bg-gray-900 text-white border-gray-700" : "bg-white text-gray-900 border-gray-200"}>
             <DropdownMenuItem onClick={toggleTheme}>
               {isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             </DropdownMenuItem>
@@ -130,14 +129,27 @@ const ChatPage = () => {
         </DropdownMenu>
       </div>
 
-      {/* ChatHeader */}
-      {showWelcome && (
-        <ChatHeader />
-      )}
-
-      {/* Starter Prompts (shown after header) */}
+      {/* Welcome Section (no privacy message) */}
       {showWelcome && (
         <div className="p-6 space-y-6">
+          {/* AI Welcome Speech Bubble */}
+          <div className="flex justify-start">
+            <div className="max-w-[80%] bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-300 shadow-md p-4 rounded-2xl border border-yellow-200/80 text-gray-900 font-medium relative">
+              <span className="absolute -left-1 top-4 h-4 w-4 bg-yellow-400 rounded-full blur-sm opacity-40 -z-10" />
+              <div className="flex items-start gap-3">
+                {/* Avatar (blank for now) */}
+                <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
+                  <span className="text-lg">🤖</span>
+                </div>
+                <div className="flex-1">
+                  <p className="">
+                    Hey there! 👋 I'm Savvy, your smart assistant here on SavvyBee — built to help you take control of your money, one simple step at a time.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Starter Prompts */}
           <div className="grid grid-cols-2 gap-3">
             {starterPrompts.map((prompt, index) => (
               <button
