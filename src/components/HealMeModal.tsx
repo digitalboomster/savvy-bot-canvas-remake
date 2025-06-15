@@ -29,12 +29,12 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
           ${isDarkMode ? "border-white/10 bg-gray-900" : "border-black/10 bg-white"} transition-colors duration-300`}
         style={{ borderRadius: 24 }}
       >
-        {/* Unified Header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-md">
+        {/* Header (less bottom padding) */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-md">
           <span className="text-lg font-black text-gray-900 dark:text-white flex-1 text-center">Bee Counsellor</span>
         </div>
-        {/* Prompt & content */}
-        <div className={`px-8 pt-7 pb-8 text-center rounded-b-2xl ${isDarkMode ? "bg-gray-900" : "bg-white"}`}>
+        {/* Prompt & content (less top padding) */}
+        <div className={`px-8 pt-4 pb-8 text-center rounded-b-2xl ${isDarkMode ? "bg-gray-900" : "bg-white"}`}>
           <h2 className="text-lg font-semibold mb-5 text-gray-900 dark:text-white">How are you feeling?</h2>
           <div className="grid grid-cols-2 gap-4">
             {moodOptions.map(({ key, label, img }) => (
