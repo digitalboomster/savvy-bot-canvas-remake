@@ -98,17 +98,7 @@ const ChatInterface = () => {
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Monthly Reports</h3>
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-400">54256</div>
-                <div className="text-gray-400 text-sm">Message Sent</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-400">49823</div>
-                <div className="text-gray-400 text-sm">Message Receive</div>
-              </div>
-            </div>
-            <div className="mt-4 text-center">
+            <div className="text-center">
               <span className="inline-block bg-yellow-400/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium">
                 Coming Soon
               </span>
