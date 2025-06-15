@@ -119,6 +119,13 @@ const ChatPage = () => {
     };
   }, [showFeaturesMenu]);
 
+  // Synchronize featuresRotated → true when menu opens, false when closed
+  useEffect(() => {
+    if (!showFeaturesMenu && featuresRotated) {
+      setFeaturesRotated(false);
+    }
+  }, [showFeaturesMenu]); // Only triggers when menu closes
+
   return (
     <div className={`${themeClasses} flex flex-col`}>
       {/* Header */}
