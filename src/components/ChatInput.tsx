@@ -27,16 +27,14 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onClick={onFeaturesButtonClick}
           aria-label="Show chat features"
           type="button"
-          className={`absolute left-4 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full flex items-center justify-center border-none bg-[#E8E9EB] hover:bg-[#C5C5C7] 
-            transition ${featuresRotated ? 'rotate-45' : ''}
-          `}
+          className={`absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center border-none bg-[#E8E9EB] hover:bg-[#C5C5C7] transition ${featuresRotated ? 'rotate-45' : ''}`}
           style={{outline: 'none'}}
         >
-          <Plus size={18} className="text-[#7D7F85]" />
+          <Plus size={20} className="text-[#7D7F85]" />
         </button>
         {/* Input Field */}
         <div
-          className={`mx-auto w-[328px] min-h-[36px] pl-14 pr-12 py-2.5 rounded-full border focus-within:border-[#C5C5C7] border-[#C5C5C7] bg-white flex items-center font-manrope transition-all`}
+          className={`mx-auto w-[328px] min-h-[42px] pl-12 pr-12 py-2.5 rounded-full border focus-within:border-[#C5C5C7] border-[#C5C5C7] bg-white flex items-center font-manrope transition-all`}
           style={{
             outline: '1px #C5C5C7 solid',
             outlineOffset: '-1px',
@@ -49,16 +47,17 @@ const ChatInput: React.FC<ChatInputProps> = ({
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && onSend(inputText)}
             placeholder="Message to Savvy..."
-            className="w-full border-none bg-transparent px-0 text-[14px] font-normal outline-none focus:outline-none placeholder:text-[#C5C5C7] text-[#1A1D20] font-manrope"
+            className="w-full border-none bg-transparent px-0 text-[15px] font-normal outline-none focus:outline-none placeholder:text-[#B4B8BF] text-[#1A1D20] font-manrope"
+            style={{lineHeight: 1.45}}
           />
         </div>
         {/* Mic Button */}
         <button
           onClick={() => onSend(inputText)}
-          className="absolute right-5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full transition hover:bg-[#F2F3F5]"
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full transition hover:bg-[#F2F3F5]"
           aria-label="Send by mic"
         >
-          <Mic size={18} className="text-[#B4B8BF]" />
+          <Mic size={20} className="text-[#B4B8BF]" />
         </button>
       </div>
     </div>
@@ -70,3 +69,4 @@ const ChatInput: React.FC<ChatInputProps> = ({
 );
 
 export default ChatInput;
+
