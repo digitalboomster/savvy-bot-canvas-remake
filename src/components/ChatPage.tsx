@@ -6,6 +6,7 @@ import ChatWelcome from './ChatWelcome';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import DocumentViewerModal from './DocumentViewerModal';
+import HealMeModal from "./HealMeModal";
 
 // Message type
 interface Message {
@@ -24,6 +25,7 @@ const ChatPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const [showDocsViewer, setShowDocsViewer] = useState(false);
+  const [showHealMe, setShowHealMe] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -124,7 +126,18 @@ const ChatPage = () => {
     if (featureKey === "documents") {
       setShowDocsViewer(true);
     }
+    if (featureKey === "heal-me") {
+      setShowHealMe(true);
+    }
     // ... Optionally handle other features
+  };
+
+  // Handles mood selection in HealMeModal
+  const handleMoodSelect = (mood) => {
+    setShowHealMe(false);
+    // Optionally send message to AI or set state for further UI
+    // e.g. handleSendMessage(`I am feeling ${mood}`);
+    // Leave the actual backend/AI flow to user's logic as requested
   };
 
   // THIS is the updated handler for the Document Modal close/back chevron:
@@ -162,6 +175,13 @@ const ChatPage = () => {
 
       {/* Document Viewer Modal */}
       <DocumentViewerModal open={showDocsViewer} onClose={handleCloseDocsAndShowFeatures} />
+
+      {/* Heal Me Modal */}
+      <HealMeModal
+        open={showHealMe}
+        onClose={() => setShowHealMe(false)}
+        onMoodSelect={handleMoodSelect}
+      />
 
       {/* Input Area */}
       <ChatInput
