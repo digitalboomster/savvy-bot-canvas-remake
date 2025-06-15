@@ -61,12 +61,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
         </button>
       </div>
     </div>
-    {/* Drag Handle (like iOS home bar) */}
-    <div className="flex justify-center items-center mt-[8px]">
-      <div className="w-[135px] h-[5px] bg-black/75 rounded-full opacity-60"></div>
-    </div>
+    {/* Removed drag handle/home indicator */}
   </div>
 );
 
 export default ChatInput;
-
