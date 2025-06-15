@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { X, MoreVertical, MessageCircle } from 'lucide-react';
+
+import React, { useState, useEffect } from 'react';
+import { X, MoreVertical, MessageCircle, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ConversationHistory from './ConversationHistory';
 
@@ -12,20 +13,40 @@ interface Conversation {
 
 const ChatInterface = () => {
   const navigate = useNavigate();
-  const [conversations, setConversations] = useState<Conversation[]>([
-    {
-      id: '1',
-      title: 'Tips on Savings',
-      timestamp: '2d ago',
-      preview: 'How can I improve my savings rate?'
-    },
-    {
-      id: '2',
-      title: 'Analysis on your Budget',
-      timestamp: '2d ago',
-      preview: 'Please analyze my monthly expenses'
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [showDeleteMode, setShowDeleteMode] = useState(false);
+
+  // Load conversations from localStorage on mount
+  useEffect(() => {
+    const savedConversations = localStorage.getItem('savvy-conversations');
+    if (savedConversations) {
+      setConversations(JSON.parse(savedConversations));
+    } else {
+      // Default conversations
+      const defaultConversations = [
+        {
+          id: '1',
+          title: 'Tips on Savings',
+          timestamp: '2d ago',
+          preview: 'How can I improve my savings rate?'
+        },
+        {
+          id: '2',
+          title: 'Analysis on your Budget',
+          timestamp: '2d ago',
+          preview: 'Please analyze my monthly expenses'
+        }
+      ];
+      setConversations(defaultConversations);
+      localStorage.setItem('savvy-conversations', JSON.stringify(defaultConversations));
     }
-  ]);
+  }, []);
+
+  // Save conversations to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('savvy-conversations', JSON.stringify(conversations));
+  }, [conversations]);
 
   const handleStartConversation = () => {
     const newConversation: Conversation = {
@@ -34,13 +55,27 @@ const ChatInterface = () => {
       timestamp: 'now',
       preview: 'Started a new conversation with Savvy Bot'
     };
-    setConversations([newConversation, ...conversations]);
+    const updatedConversations = [newConversation, ...conversations];
+    setConversations(updatedConversations);
     console.log('Starting new conversation:', newConversation);
-    navigate('/chat');
+    navigate('/chat', { state: { conversationId: newConversation.id } });
   };
 
+  const handleDeleteConversation = (conversationId: string) => {
+    setConversations(prev => prev.filter(conv => conv.id !== conversationId));
+    setShowDeleteMode(false);
+  };
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const themeClasses = isDarkMode 
+    ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
+    : "min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-50 text-gray-900";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div className={themeClasses}>
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-400/10 rounded-full blur-xl animate-pulse"></div>
@@ -51,12 +86,15 @@ const ChatInterface = () => {
       <div className="relative z-10 max-w-md mx-auto px-4 py-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <button className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200">
-            <X size={24} className="text-gray-300 hover:text-white" />
+          <button className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}>
+            <X size={24} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
           </button>
           <h1 className="text-xl font-semibold">Savvy Bot</h1>
-          <button className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200">
-            <MoreVertical size={24} className="text-gray-300 hover:text-white" />
+          <button 
+            onClick={toggleTheme}
+            className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
+          >
+            <MoreVertical size={24} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
           </button>
         </div>
 
@@ -66,7 +104,7 @@ const ChatInterface = () => {
             Hi There 
             <span className="animate-bounce">👋</span>
           </h2>
-          <p className="text-gray-300 leading-relaxed">
+          <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} leading-relaxed`}>
             Hey There! Welcome to Savvy Bot. I have a response to every message, thoughts. So feel to ask anything!
           </p>
         </div>
@@ -99,7 +137,7 @@ const ChatInterface = () => {
         {/* Monthly Reports */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Monthly Reports</h3>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+          <div className={`${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-xl p-6`}>
             <div className="text-center">
               <span className="inline-block bg-yellow-400/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium">
                 Coming Soon
@@ -109,7 +147,13 @@ const ChatInterface = () => {
         </div>
 
         {/* Recent Conversations */}
-        <ConversationHistory conversations={conversations} />
+        <ConversationHistory 
+          conversations={conversations} 
+          onDeleteConversation={handleDeleteConversation}
+          showDeleteMode={showDeleteMode}
+          onToggleDeleteMode={setShowDeleteMode}
+          isDarkMode={isDarkMode}
+        />
       </div>
     </div>
   );

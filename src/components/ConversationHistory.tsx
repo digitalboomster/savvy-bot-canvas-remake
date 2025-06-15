@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Trash2 } from 'lucide-react';
 
 interface Conversation {
   id: string;
@@ -11,9 +11,19 @@ interface Conversation {
 
 interface ConversationHistoryProps {
   conversations: Conversation[];
+  onDeleteConversation: (id: string) => void;
+  showDeleteMode: boolean;
+  onToggleDeleteMode: (show: boolean) => void;
+  isDarkMode: boolean;
 }
 
-const ConversationHistory: React.FC<ConversationHistoryProps> = ({ conversations }) => {
+const ConversationHistory: React.FC<ConversationHistoryProps> = ({ 
+  conversations, 
+  onDeleteConversation, 
+  showDeleteMode, 
+  onToggleDeleteMode,
+  isDarkMode 
+}) => {
   const getConversationIcon = (title: string) => {
     if (title.toLowerCase().includes('savings')) {
       return '💰';
@@ -23,14 +33,30 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({ conversations
     return '💬';
   };
 
+  const handleLongPress = (conversationId: string) => {
+    onToggleDeleteMode(true);
+  };
+
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-4">Recent Conversation</h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold">Recent Conversation</h3>
+        {showDeleteMode && (
+          <button
+            onClick={() => onToggleDeleteMode(false)}
+            className="text-sm text-yellow-400 hover:text-yellow-300"
+          >
+            Done
+          </button>
+        )}
+      </div>
       <div className="space-y-3">
         {conversations.map((conversation) => (
           <div 
             key={conversation.id}
-            className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-200 cursor-pointer group"
+            className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 transition-all duration-200 cursor-pointer group relative`}
+            onTouchStart={() => handleLongPress(conversation.id)}
+            onMouseDown={() => handleLongPress(conversation.id)}
           >
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform duration-200">
@@ -38,17 +64,28 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({ conversations
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-medium text-white truncate group-hover:text-yellow-400 transition-colors duration-200">
+                  <h4 className={`font-medium truncate group-hover:text-yellow-400 transition-colors duration-200 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {conversation.title}
                   </h4>
-                  <span className="text-xs text-gray-400 shrink-0 ml-2">
+                  <span className={`text-xs shrink-0 ml-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     {conversation.timestamp}
                   </span>
                 </div>
-                <p className="text-sm text-gray-400 truncate">
+                <p className={`text-sm truncate ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   Savvy • {conversation.preview}
                 </p>
               </div>
+              {showDeleteMode && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteConversation(conversation.id);
+                  }}
+                  className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition-colors duration-200"
+                >
+                  <Trash2 size={16} className="text-white" />
+                </button>
+              )}
             </div>
           </div>
         ))}
