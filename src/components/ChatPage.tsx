@@ -104,12 +104,12 @@ const ChatPage = () => {
           <div className="w-full bg-[#212226] rounded-b-[32px] text-white">
               <div className="max-w-md mx-auto h-[272px] flex flex-col">
                   <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} isAlwaysDark />
-                  <div className="px-6 flex-grow flex flex-col justify-center">
+                  <div className="px-6 flex-grow flex items-center">
                       <div className="flex items-start gap-3">
                           <AiAvatar />
                           <div className="flex-1">
-                              <p className="mb-2">
-                                  This is private message, between you and buddy. This chat is end to end encrypted...
+                              <p className="leading-relaxed text-gray-300">
+                                This is a private and secure chat. All messages are end-to-end encrypted to protect your privacy.
                               </p>
                           </div>
                       </div>
