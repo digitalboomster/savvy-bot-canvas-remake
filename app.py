@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from typing import Optional, List, Dict
@@ -157,4 +156,3 @@ def healthswap():
     return {"msg": make_health_swap()}
 
 # (Optional) More endpoints for reminders, streaks, gamified rewards, etc.
-
