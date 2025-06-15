@@ -1,8 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Mic, Plus } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import ChatFeaturesMenu from './ChatFeaturesMenu';
 
+import React, { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import ChatFeaturesMenu from './ChatFeaturesMenu';
+import ChatHeader from './ChatHeader';
+import ChatWelcome from './ChatWelcome';
+import ChatMessages from './ChatMessages';
+import ChatInput from './ChatInput';
+
+// Message type
 interface Message {
   id: string;
   text: string;
@@ -19,7 +24,6 @@ const ChatPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
   const location = useLocation();
 
   const starterPrompts = [
@@ -29,15 +33,12 @@ const ChatPage = () => {
     "I want to track my spending"
   ];
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // Scroll to latest message or typing
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isAiTyping]);
 
-  // Save conversation when messages change
+  // Save conversation to localStorage
   useEffect(() => {
     if (messages.length > 0) {
       const conversationId = location.state?.conversationId || 'default';
@@ -73,6 +74,7 @@ const ChatPage = () => {
     }, 2000);
   };
 
+  // Basic AI response sim
   const getAiResponse = (userText: string) => {
     if (userText.toLowerCase().includes('saving')) {
       return "Great question! I'm Savvy, your smart assistant here on SavvyBee — built to help you take control of your money, one simple step at a time. Let's start with creating a budget and identifying areas where you can cut expenses.";
@@ -93,208 +95,66 @@ const ChatPage = () => {
     handleSendMessage(prompt);
   };
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const toggleTheme = () => setIsDarkMode((d) => !d);
 
   const themeClasses = isDarkMode 
     ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
     : "min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-50 text-gray-900";
 
-  // Add handler for feature select (no navigation, just log for now)
+  // On features menu open/close: ensure featuresRotated always matches menu state
+  useEffect(() => {
+    if (showFeaturesMenu) setFeaturesRotated(true);
+    else setFeaturesRotated(false);
+  }, [showFeaturesMenu]);
+
+  // Handler for features button
+  const onFeaturesButtonClick = () => {
+    setShowFeaturesMenu(prev => !prev);
+    // Rotation is now managed by useEffect above
+  };
+
+  // Handler for feature menu feature click
   const handleFeatureSelect = (featureKey: string) => {
-    // TODO: you can wire up navigation or modals here
+    // handle feature select here (e.g. modals, navigation, etc)
     console.log(`Feature selected: ${featureKey}`);
   };
 
-  // Close menu on outside click/esc
-  useEffect(() => {
-    if (!showFeaturesMenu) return;
-    const handle = () => setShowFeaturesMenu(false);
-    window.addEventListener("mousedown", handle);
-    window.addEventListener("keydown", (e) => { if (e.key === "Escape") handle(); });
-    return () => {
-      window.removeEventListener("mousedown", handle);
-      window.removeEventListener("keydown", (e) => { if (e.key === "Escape") handle(); });
-    };
-  }, [showFeaturesMenu]);
-
-  // Synchronize featuresRotated → true when menu opens, false when closed
-  useEffect(() => {
-    if (!showFeaturesMenu && featuresRotated) {
-      setFeaturesRotated(false);
-    }
-  }, [showFeaturesMenu]); // Only triggers when menu closes
-
   return (
     <div className={`${themeClasses} flex flex-col`}>
-      {/* Header */}
-      <div className={`flex items-center justify-between p-4 border-b ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
-        <button 
-          onClick={() => navigate('/')}
-          className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
-        >
-          <ArrowLeft size={24} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
-        </button>
-        <h1 className="text-xl font-semibold">Savvy Bot</h1>
-        <button 
-          onClick={toggleTheme}
-          className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
-        >
-          <div className="flex flex-col gap-1">
-            <div className={`w-1 h-1 ${isDarkMode ? 'bg-gray-300' : 'bg-gray-600'} rounded-full`}></div>
-            <div className={`w-1 h-1 ${isDarkMode ? 'bg-gray-300' : 'bg-gray-600'} rounded-full`}></div>
-            <div className={`w-1 h-1 ${isDarkMode ? 'bg-gray-300' : 'bg-gray-600'} rounded-full`}></div>
-          </div>
-        </button>
-      </div>
-
+      <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       {/* Welcome Section */}
       {showWelcome && (
-        <div className="p-6 space-y-6">
-          {/* Privacy Message */}
-          <div className={`${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-2xl p-6`}>
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-                <span className="text-lg">🤖</span>
-              </div>
-              <div className="flex-1">
-                <p className={`${isDarkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
-                  This is private message, between you and buddy. This chat is end to end encrypted...
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* AI Welcome Message */}
-          <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white shadow-sm border border-gray-200'} rounded-2xl p-4`}>
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-                <span className="text-lg">🤖</span>
-              </div>
-              <div className="flex-1">
-                <p className="text-gray-800">
-                  Hey there! 👋 I'm Savvy, your smart assistant here on SavvyBee — built to help you take control of your money, one simple step at a time.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Starter Prompts */}
-          <div className="grid grid-cols-2 gap-3">
-            {starterPrompts.map((prompt, index) => (
-              <button
-                key={index}
-                onClick={() => handlePromptClick(prompt)}
-                className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 text-left transition-all duration-200 text-sm`}
-              >
-                {prompt}
-              </button>
-            ))}
-          </div>
-        </div>
+        <ChatWelcome 
+          isDarkMode={isDarkMode}
+          starterPrompts={starterPrompts}
+          onPromptClick={handlePromptClick}
+        />
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-          >
-            <div className="flex items-start gap-3 max-w-[80%]">
-              {!message.isUser && (
-                <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-                  <span className="text-lg">🤖</span>
-                </div>
-              )}
-              <div
-                className={`px-4 py-3 rounded-2xl ${
-                  message.isUser
-                    ? isDarkMode 
-                      ? 'bg-gray-700 text-white ml-auto'
-                      : 'bg-blue-500 text-white ml-auto'
-                    : isDarkMode 
-                      ? 'bg-gray-100 text-gray-800'
-                      : 'bg-white text-gray-800 border border-gray-200'
-                }`}
-              >
-                <p className="text-sm">{message.text}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {/* Typing Indicator */}
-        {isAiTyping && (
-          <div className="flex justify-start">
-            <div className="flex items-start gap-3 max-w-[80%]">
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-                <span className="text-lg">🤖</span>
-              </div>
-              <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white border border-gray-200'} px-4 py-3 rounded-2xl`}>
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
-      </div>
+      <ChatMessages
+        messages={messages}
+        isAiTyping={isAiTyping}
+        isDarkMode={isDarkMode}
+        messagesEndRef={messagesEndRef}
+      />
 
       {/* Features Floating Menu */}
       <ChatFeaturesMenu
         open={showFeaturesMenu}
-        onClose={() => {
-          setShowFeaturesMenu(false);
-          setFeaturesRotated(false);
-        }}
+        onClose={() => setShowFeaturesMenu(false)}
         onFeatureClick={handleFeatureSelect}
       />
 
       {/* Input Area */}
-      <div className={`p-4 border-t ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
-        <div className="flex items-center gap-3">
-          {/* Features Button (Cross/Plus that rotates) */}
-          <button
-            onClick={() => {
-              setShowFeaturesMenu((open) => {
-                setFeaturesRotated(!open ? true : false);
-                return !open;
-              });
-            }}
-            className={`p-3 ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-full transition-all duration-200 ${
-              featuresRotated ? 'rotate-45' : ''
-            }`}
-            aria-label="Show chat features"
-            type="button"
-          >
-            <Plus size={20} className={isDarkMode ? "text-gray-300" : "text-gray-600"} />
-          </button>
-
-          {/* Input Field */}
-          <div className={`flex-1 flex items-center ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-full px-4 py-2`}>
-            <input
-              type="text"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(inputText)}
-              placeholder="Message to Savvy..."
-              className={`flex-1 bg-transparent ${isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'} outline-none px-2`}
-            />
-            <button
-              onClick={() => handleSendMessage(inputText)}
-              className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-full transition-colors duration-200`}
-            >
-              <Mic size={20} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
-            </button>
-          </div>
-        </div>
-      </div>
+      <ChatInput
+        inputText={inputText}
+        setInputText={setInputText}
+        onSend={handleSendMessage}
+        isDarkMode={isDarkMode}
+        featuresRotated={featuresRotated}
+        onFeaturesButtonClick={onFeaturesButtonClick}
+      />
     </div>
   );
 };
