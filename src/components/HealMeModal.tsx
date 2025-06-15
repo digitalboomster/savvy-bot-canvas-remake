@@ -13,10 +13,10 @@ interface HealMeModalProps {
 type MoodOption = "Good" | "Okay" | "Stressed" | "Anxious";
 
 const moodOptions: { key: MoodOption; label: string; img: string }[] = [
-  { key: "Good", label: "Good", img: "/lovable-uploads/c2c65a6b-2512-4c8b-8ffd-68a16dd851a5.png" },
-  { key: "Okay", label: "Okay", img: "/lovable-uploads/c2c65a6b-2512-4c8b-8ffd-68a16dd851a5.png" },
-  { key: "Stressed", label: "Stressed", img: "/lovable-uploads/c2c65a6b-2512-4c8b-8ffd-68a16dd851a5.png" },
-  { key: "Anxious", label: "Anxious", img: "/lovable-uploads/c2c65a6b-2512-4c8b-8ffd-68a16dd851a5.png" }
+  { key: "Good", label: "Good", img: "/lovable-uploads/db49d954-992b-47ef-8a05-3e02524e0a86.png" },
+  { key: "Okay", label: "Okay", img: "/lovable-uploads/6d5b7eb4-e9dc-4296-8eb0-65909e395b7b.png" },
+  { key: "Stressed", label: "Stressed", img: "/lovable-uploads/72b47c28-5e46-4d93-9528-29b636bb6291.png" },
+  { key: "Anxious", label: "Anxious", img: "/lovable-uploads/989613d1-0781-43ed-aa68-658222a3280e.png" }
 ];
 
 const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }) => {
@@ -52,8 +52,8 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
                 <img
                   src={img}
                   alt={label}
-                  className="w-16 h-16 rounded-full mb-2 bg-transparent"
-                  style={{ objectFit: "contain" }}
+                  className="rounded-full mb-2 bg-gray-200"
+                  style={{ width: 100, height: 100, objectFit: "cover" }}
                 />
                 <span className={`font-semibold text-base ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>
                   {label}
@@ -68,3 +68,4 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
 };
 
 export default HealMeModal;
+
