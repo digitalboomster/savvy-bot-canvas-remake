@@ -23,7 +23,7 @@ const ChatPage = () => {
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [featuresRotated, setFeaturesRotated] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false); // Changed to light mode by default
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const [showDocsViewer, setShowDocsViewer] = useState(false);
   const [showHealMe, setShowHealMe] = useState(false);
@@ -162,7 +162,7 @@ const ChatPage = () => {
   }
 
   return (
-    <div className={`${themeClasses} flex flex-col`}>
+    <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
       <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
 
       {/* Welcome Section */}

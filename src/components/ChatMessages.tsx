@@ -1,5 +1,5 @@
 
-import React, { RefObject } from "react";
+import React from 'react';
 
 interface Message {
   id: string;
@@ -7,63 +7,67 @@ interface Message {
   isUser: boolean;
   timestamp: Date;
 }
+
 interface ChatMessagesProps {
   messages: Message[];
   isAiTyping: boolean;
   isDarkMode: boolean;
-  messagesEndRef: RefObject<HTMLDivElement>;
+  messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({
-  messages, isAiTyping, isDarkMode, messagesEndRef
+  messages,
+  isAiTyping,
+  isDarkMode,
+  messagesEndRef
 }) => {
+  if (messages.length === 0) return null;
+
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-4">
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-        >
-          <div className="flex items-start gap-3 max-w-[80%]">
+    <div className="flex-1 overflow-y-auto px-4 py-4 pb-32">
+      <div className="max-w-2xl mx-auto space-y-4">
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`flex items-start gap-3 ${message.isUser ? 'flex-row-reverse' : 'flex-row'}`}
+          >
             {!message.isUser && (
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-                <span className="text-lg">🤖</span>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} flex-shrink-0 mt-1`}>
+                <span className="text-sm">🐝</span>
               </div>
             )}
+            
             <div
-              className={`px-4 py-3 rounded-2xl ${
+              className={`max-w-[80%] px-4 py-3 rounded-2xl ${
                 message.isUser
-                  ? isDarkMode 
-                    ? 'bg-gray-700 text-white ml-auto'
-                    : 'bg-blue-500 text-white ml-auto'
-                  : isDarkMode 
-                    ? 'bg-gray-100 text-gray-800'
-                    : 'bg-white text-gray-800 border border-gray-200'
+                  ? `${isDarkMode ? 'bg-blue-600 text-white' : 'bg-gray-900 text-white'} rounded-tr-md`
+                  : `${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'} rounded-tl-md`
               }`}
             >
-              <p className="text-sm">{message.text}</p>
+              <p className="text-base leading-relaxed whitespace-pre-wrap">
+                {message.text}
+              </p>
             </div>
           </div>
-        </div>
-      ))}
-      {/* Typing Indicator */}
-      {isAiTyping && (
-        <div className="flex justify-start">
-          <div className="flex items-start gap-3 max-w-[80%]">
-            <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-              <span className="text-lg">🤖</span>
+        ))}
+
+        {isAiTyping && (
+          <div className="flex items-start gap-3">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} flex-shrink-0`}>
+              <span className="text-sm">🐝</span>
             </div>
-            <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white border border-gray-200'} px-4 py-3 rounded-2xl`}>
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            <div className={`px-4 py-3 rounded-2xl rounded-tl-md ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+              <div className="flex gap-1">
+                <div className={`w-2 h-2 rounded-full animate-pulse ${isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`} style={{ animationDelay: '0ms' }}></div>
+                <div className={`w-2 h-2 rounded-full animate-pulse ${isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`} style={{ animationDelay: '150ms' }}></div>
+                <div className={`w-2 h-2 rounded-full animate-pulse ${isDarkMode ? 'bg-gray-500' : 'bg-gray-400'}`} style={{ animationDelay: '300ms' }}></div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-      <div ref={messagesEndRef} />
+        )}
+
+        <div ref={messagesEndRef} />
+      </div>
     </div>
   );
 };

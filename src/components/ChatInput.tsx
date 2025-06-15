@@ -19,12 +19,12 @@ const ChatInput: React.FC<ChatInputProps> = ({
   featuresRotated,
   onFeaturesButtonClick
 }) => (
-  <div className={`p-4 border-t ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
-    <div className="flex items-center gap-3">
-      {/* Features Button (cross/plus rotated) */}
+  <div className={`fixed bottom-0 left-0 right-0 p-4 border-t ${isDarkMode ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'}`}>
+    <div className="max-w-4xl mx-auto flex items-center gap-3">
+      {/* Features Button */}
       <button
         onClick={onFeaturesButtonClick}
-        className={`p-3 ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-full transition-all duration-200 ${
+        className={`p-3 ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'} rounded-full transition-all duration-200 ${
           featuresRotated ? 'rotate-45' : ''
         }`}
         aria-label="Show chat features"
@@ -32,24 +32,28 @@ const ChatInput: React.FC<ChatInputProps> = ({
       >
         <Plus size={20} className={isDarkMode ? "text-gray-300" : "text-gray-600"} />
       </button>
-      {/* Input */}
-      <div className={`flex-1 flex items-center ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-full px-4 py-2`}>
+      
+      {/* Input Container */}
+      <div className={`flex-1 flex items-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} rounded-full px-4 py-3`}>
         <input
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && onSend(inputText)}
           placeholder="Message to Savvy..."
-          className={`flex-1 bg-transparent ${isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'} outline-none px-2`}
+          className={`flex-1 bg-transparent ${isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'} outline-none px-2 text-base`}
         />
         <button
           onClick={() => onSend(inputText)}
-          className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-full transition-colors duration-200`}
+          className={`p-2 hover:${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded-full transition-colors duration-200`}
         >
-          <Mic size={20} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
+          <Mic size={18} className={isDarkMode ? "text-gray-300" : "text-gray-600"} />
         </button>
       </div>
     </div>
+    
+    {/* Safe area for mobile devices */}
+    <div className="h-safe-area-inset-bottom"></div>
   </div>
 );
 
