@@ -41,7 +41,7 @@ type Feature = {
   key: string;
   label: string;
   icon: React.ReactNode;
-  iconBgClass: string; // for the background circle
+  iconBgClass: string;
   iconBorder: string;
 };
 
@@ -106,6 +106,18 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
   if (!open) return null;
   return (
     <>
+      {/* Overlay */}
+      <div
+        className="fixed inset-0 z-40 bg-black/60 animate-fade-in transition-opacity"
+        style={{
+          // support both dark and light mode
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)'
+        }}
+        aria-hidden="true"
+        onClick={onClose}
+      />
+      {/* Menu */}
       <div 
         className={`
           fixed left-1/2 bottom-28 z-50 animate-fade-in
@@ -155,12 +167,12 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
           </div>
         </div>
       </div>
-      {/* Overlay for outside click */}
+      {/* Accessible close button (not visually necessary with overlay but kept for accessibility) */}
       <button
         className="fixed inset-0 z-40"
         tabIndex={-1}
         aria-label="Close features menu"
-        style={{ background: "transparent", pointerEvents: "auto" }}
+        style={{ background: "transparent", pointerEvents: "none" }}
         onClick={onClose}
       />
     </>
@@ -168,3 +180,4 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
 };
 
 export default ChatFeaturesMenu;
+
