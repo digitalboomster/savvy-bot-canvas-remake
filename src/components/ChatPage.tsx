@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -10,6 +9,7 @@ import ChatInput from './ChatInput';
 import DocumentViewerModal from './DocumentViewerModal';
 import HealMeModal from "./HealMeModal";
 import CaptureReceiptPage from "./CaptureReceiptPage";
+import { toast } from "@/hooks/use-toast";
 
 // Message type
 interface Message {
@@ -18,6 +18,8 @@ interface Message {
   isUser: boolean;
   timestamp: Date;
 }
+
+const BACKEND_URL = "https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState<any[]>([]);
@@ -61,51 +63,55 @@ const ChatPage = () => {
     setFeaturesRotated(showFeaturesMenu);
   }, [showFeaturesMenu]);
 
+  // Handle AI send message with Replit backend
   const handleSendMessage = async (text: string) => {
-  if (!text.trim()) return;
+    if (!text.trim()) return;
 
-  const userMessage = {
-    id: Date.now().toString(),
-    text: text.trim(),
-    isUser: true,
-    timestamp: new Date()
+    const userMessage = {
+      id: Date.now().toString(),
+      text: text.trim(),
+      isUser: true,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputText('');
+    setShowWelcome(false);
+    setIsAiTyping(true);
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text.trim() })
+      });
+
+      if (!response.ok) {
+        throw new Error("Server error");
+      }
+      const data = await response.json();
+      const aiMessage = {
+        id: (Date.now() + 1).toString(),
+        text: data.reply || 'Sorry, I had trouble responding.',
+        isUser: false,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        text: "Sorry, I'm having connection issues. Please try again.",
+        isUser: false,
+        timestamp: new Date()
+      }]);
+      toast({
+        title: "Error",
+        description: "Failed to connect to AI. Please try again."
+      });
+    } finally {
+      setIsAiTyping(false);
+    }
   };
-
-  setMessages(prev => [...prev, userMessage]);
-  setInputText('');
-  setShowWelcome(false);
-  setIsAiTyping(true);
-
-  try {
-    const response = await fetch('https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text.trim() })
-    });
-    
-    const data = await response.json();
-    
-    const aiMessage = {
-      id: (Date.now() + 1).toString(),
-      text: data.reply || 'Sorry, I had trouble responding.',
-      isUser: false,
-      timestamp: new Date()
-    };
-    
-    setMessages(prev => [...prev, aiMessage]);
-  } catch (error) {
-    const errorMessage = {
-      id: (Date.now() + 1).toString(),
-      text: 'Sorry, I'm having connection issues. Please try again.',
-      isUser: false,
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, errorMessage]);
-  } finally {
-    setIsAiTyping(false);
-  }
-};
-
 
   // Basic AI response sim
   const getAiResponse = (userText: string) => {
@@ -160,9 +166,28 @@ const ChatPage = () => {
     // ... Optionally handle other features
   };
 
-  const handleMoodSelect = (mood) => {
+  // Mood select with checkin API call
+  const handleMoodSelect = async (mood) => {
     setShowHealMe(false);
-    // Optionally send message to AI or set state for further UI
+    try {
+      const response = await fetch(`${BACKEND_URL}/checkin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mood: mood.toLowerCase(), note: '' })
+      });
+      if (!response.ok) {
+        throw new Error("Mood check-in failed");
+      }
+      toast({
+        title: "Mood logged",
+        description: `Your mood (${mood}) has been recorded.`
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log your mood. Please try again."
+      });
+    }
   };
 
   const handleCloseDocsAndShowFeatures = () => {

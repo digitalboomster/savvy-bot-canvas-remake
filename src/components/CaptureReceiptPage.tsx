@@ -4,18 +4,33 @@ import { ChevronLeft, Camera, Upload } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import ReceiptCameraFrame from "./ReceiptCameraFrame";
+import { toast } from "@/hooks/use-toast";
 
 interface CaptureReceiptPageProps {
   onBack: () => void;
 }
 
+const BACKEND_URL = "https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev";
 const FRAME_WIDTH = 340;
 const FRAME_HEIGHT = 400;
+
+// Helper: base64 => Blob
+function dataURLtoBlob(dataurl: string) {
+  let arr = dataurl.split(',');
+  let mime = arr[0].match(/:(.*?);/)?.[1] || '';
+  let bstr = atob(arr[1]);
+  let n = bstr.length;
+  let u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new Blob([u8arr], { type: mime });
+}
 
 const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isCameraReady, setCameraReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [fileInput, setFileInput] = useState<HTMLInputElement | null>(null);
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
@@ -45,15 +60,68 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
     };
   }, []);
 
-  // Replace console.log('Captured image', dataUrl);
-// with:
-const formData = new FormData();
-formData.append('file', dataURLtoBlob(dataUrl), 'receipt.png');
+  // Capture photo from camera and upload to backend
+  const handleCapture = async () => {
+    if (!videoRef.current || !isCameraReady) return;
+    try {
+      setUploading(true);
+      // Draw current frame to canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = FRAME_WIDTH - 40; // match inner frame size
+      canvas.height = FRAME_HEIGHT - 40;
+      const ctx = canvas.getContext('2d');
+      ctx?.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
-fetch('https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev/upload-receipt', {
-  method: 'POST',
-  body: formData
-});
+      const dataUrl = canvas.toDataURL('image/png');
+      const formData = new FormData();
+      formData.append('file', dataURLtoBlob(dataUrl), 'receipt.png');
+
+      const response = await fetch(`${BACKEND_URL}/upload-receipt`, {
+        method: 'POST',
+        body: formData
+      });
+      if (!response.ok) throw new Error('Upload failed');
+      toast({
+        title: "Receipt uploaded",
+        description: "Your receipt photo has been sent!"
+      });
+    } catch (e) {
+      toast({
+        title: "Error",
+        description: "Could not upload receipt. Try again."
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Handle file upload from gallery
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file, file.name || "receipt.png");
+      const response = await fetch(`${BACKEND_URL}/upload-receipt`, {
+        method: 'POST',
+        body: formData
+      });
+      if (!response.ok) throw new Error("Upload failed");
+      toast({
+        title: "Receipt uploaded",
+        description: "Image from gallery sent!"
+      });
+    } catch (e) {
+      toast({
+        title: "Error",
+        description: "Could not upload file. Try again."
+      });
+    } finally {
+      setUploading(false);
+      if (fileInput) fileInput.value = "";
+    }
+  };
 
   const mainBg =
     isDarkMode
@@ -96,17 +164,31 @@ fetch('https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.
             onClick={handleCapture}
             variant={isDarkMode ? "default" : "secondary"}
             size="lg"
+            disabled={uploading || !isCameraReady}
           >
             <Camera size={22} className="mr-1" />
-            Capture Receipt
+            {uploading ? "Uploading..." : "Capture Receipt"}
           </Button>
           <Button
-            className="w-full text-base font-medium flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg"
+            className="w-full text-base font-medium flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg relative"
             variant={isDarkMode ? "outline" : "default"}
             size="lg"
+            asChild
           >
-            <Upload size={22} className="mr-1" />
-            Upload from gallery
+            <>
+              <Upload size={22} className="mr-1" />
+              Upload from gallery
+              <input
+                type="file"
+                accept="image/*"
+                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+                style={{ zIndex: 2 }}
+                tabIndex={-1}
+                ref={input => setFileInput(input)}
+                onChange={handleFileChange}
+                disabled={uploading}
+              />
+            </>
           </Button>
         </div>
       </main>
