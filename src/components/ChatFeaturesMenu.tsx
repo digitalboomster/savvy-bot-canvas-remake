@@ -1,30 +1,39 @@
-import React from "react";
-import { Upload } from "lucide-react";
 
-const IconSparkle = () => (
-  <svg width={24} height={24} stroke="#B266FF" fill="none" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-    <path d="M12 3v3M12 18v3M4.2 5.8l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M5.8 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
-    <circle cx={12} cy={12} r={5} />
-  </svg>
-);
-const IconCamera = () => (
-  <svg width={24} height={24} fill="none" stroke="#FFA726" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-    <rect x={3} y={7} width={18} height={13} rx={2} /><circle cx={12} cy={13.5} r={3} /><path d="M5 7l2.5-3h9L19 7" />
-  </svg>
-);
+import React from "react";
+import { Camera, Upload } from "lucide-react";
+
+// Custom SVG icons for My Documents, Heal Me, Analyze Me, Smart Assistant
 const IconDocuments = () => (
-  <svg width={24} height={24} fill="none" stroke="#2979FF" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-    <rect x={5} y={2} width={14} height={20} rx={2} /><path d="M9 6h6M9 10h6M9 14h2" />
+  <svg width={24} height={24} fill="none" viewBox="0 0 24 24">
+    <rect x={5} y={2} width={14} height={20} rx={2} stroke="#AB26DF" strokeWidth={2} />
+    <path d="M9 6h6M9 10h6M9 14h2" stroke="#AB26DF" strokeWidth={2} strokeLinecap="round" />
   </svg>
 );
+// Heal Me (heart)
 const IconHeal = () => (
-  <svg width={24} height={24} fill="none" stroke="#33C481" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-    <path d="M12 21C12 21 4.5 13.65 4.5 9.5A4.5 4.5 0 0112 5a4.5 4.5 0 017.5 4.5c0 4.15-7.5 11.5-7.5 11.5z" />
+  <svg width={24} height={24} fill="none" viewBox="0 0 24 24">
+    <path d="M12 21c-3.866-4.302-7.5-6.918-7.5-10.212C4.5 7.319 7.019 5 10.005 5c1.419 0 2.784.595 3.734 1.561C14.211 5.597 15.576 5 16.995 5c2.986 0 5.505 2.319 5.505 5.788C21 14.082 17.366 16.698 13.5 21z" stroke="#FF3745" strokeWidth={2} />
+    <circle cx="12" cy="14" r="0.5" fill="#FF3745"/>
   </svg>
 );
+// Analyze Me (medical cross)
 const IconAnalyse = () => (
-  <svg width={24} height={24} fill="none" stroke="#40C4FF" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-    <polyline points="4 17 10 11 14 15 20 9" /><circle cx={20} cy={9} r={2} />
+  <svg width={24} height={24} fill="none" viewBox="0 0 24 24">
+    <rect x={7} y={2} width={10} height={20} rx={5} stroke="#4264FF" strokeWidth={2}/>
+    <path d="M12 7v5m0 0h-3m3 0h3" stroke="#4264FF" strokeWidth={2} strokeLinecap="round"/>
+  </svg>
+);
+// Smart Assistant
+const IconSmartAssistant = () => (
+  <svg width={24} height={24} fill="none" viewBox="0 0 24 24">
+    <g stroke="#FFB13B" strokeWidth={2}>
+      <circle cx="12" cy="12" r="9" opacity="0.3"/>
+      <path d="M8 16h4v-2m0 0V8m0 6h4" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <circle cx="12" cy="12" r="4" fill="none"/>
+    <circle cx="12" cy="12" r="9" fill="none"/>
+    <circle cx="12" cy="12" r="4" fill="none"/>
+    <circle cx="12" cy="12" r="4" fill="none"/>
   </svg>
 );
 
@@ -32,40 +41,52 @@ type Feature = {
   key: string;
   label: string;
   icon: React.ReactNode;
-  iconColorClass: string;
-  highlighted?: boolean;
+  iconBgClass: string; // for the background circle
+  iconBorder: string;
 };
-// Revert to "Capture Receipt" as main feature instead of Smart Assistant
+
 const features: Feature[] = [
   {
     key: "capture-receipt",
     label: "Capture Receipt",
-    icon: <IconCamera />,
-    iconColorClass: "text-amber-500"
+    icon: <Camera size={20} color="#379AFF" strokeWidth={2.2} />,
+    iconBgClass: "bg-blue-100", // circle soft blue
+    iconBorder: "border-blue-200"
   },
   {
     key: "documents",
     label: "My Documents",
     icon: <IconDocuments />,
-    iconColorClass: "text-blue-500"
+    iconBgClass: "bg-purple-100",
+    iconBorder: "border-purple-200"
   },
   {
     key: "heal-me",
     label: "Heal Me",
     icon: <IconHeal />,
-    iconColorClass: "text-green-500"
+    iconBgClass: "bg-red-100",
+    iconBorder: "border-red-200"
   },
   {
     key: "analyse-me",
-    label: "Analyse Me",
+    label: "Analyze Me",
     icon: <IconAnalyse />,
-    iconColorClass: "text-sky-400"
+    iconBgClass: "bg-blue-50",
+    iconBorder: "border-blue-100"
   },
   {
     key: "upload",
     label: "Upload",
-    icon: <Upload size={22} color="#4CAF50" />,
-    iconColorClass: "text-green-500"
+    icon: <Upload size={20} color="#1DD75B" strokeWidth={2.2} />,
+    iconBgClass: "bg-green-100",
+    iconBorder: "border-green-200"
+  },
+  {
+    key: "smart-assistant",
+    label: "Smart Assistant",
+    icon: <IconSmartAssistant />,
+    iconBgClass: "bg-amber-100",
+    iconBorder: "border-amber-200"
   }
 ];
 
@@ -75,6 +96,7 @@ interface ChatFeaturesMenuProps {
   onFeatureClick?: (key: string) => void;
   className?: string;
 }
+
 const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
   open,
   onClose,
@@ -86,34 +108,46 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
     <>
       <div 
         className={`
-          fixed left-1/2 bottom-28 z-50 animate-fade-in ${className}
+          fixed left-1/2 bottom-28 z-50 animate-fade-in
           transform -translate-x-1/2
+          px-2 w-[340px] max-w-full
+          ${className}
         `}
-        style={{ minWidth: 330, maxWidth: 360 }}
         tabIndex={-1}
         onMouseDown={e => e.stopPropagation()}
       >
-        <div className="rounded-[24px] bg-[#fffbea] border border-[#e9ddb9] shadow-2xl overflow-hidden transition-all duration-300 max-w-full min-w-[320px] relative">
+        <div className="rounded-[32px] bg-white border border-neutral-100 shadow-2xl overflow-hidden transition-all duration-300 max-w-full min-w-[300px] relative">
           <div className="flex flex-col items-stretch px-0 pt-7 pb-4">
-            <div className="flex flex-col divide-y divide-[#efe2bc] mt-1">
+            <div className="flex flex-col gap-0">
               {features.map((feature, i) => (
                 <button
                   key={feature.key}
                   className={`
-                    flex items-center gap-3 w-full px-7 py-4 text-base font-semibold focus:outline-none transition
-                    bg-white
-                    hover:bg-yellow-50
+                    flex items-center gap-4 w-full px-7 py-3 text-base font-medium focus:outline-none transition bg-transparent
+                    border-0
+                    hover:bg-neutral-50
                     text-gray-900
-                    ${i === 0 ? "rounded-t-xl" : ""}
-                    ${i === features.length - 1 ? "rounded-b-xl" : ""}
+                    rounded-none
+                    ${i === 0 ? "rounded-t-2xl" : ""}
+                    ${i === features.length - 1 ? "rounded-b-2xl" : ""}
                   `}
                   aria-label={feature.label}
                   onClick={() => {
                     onClose();
                     onFeatureClick(feature.key);
                   }}
+                  style={{
+                    fontFamily: "Inter, Arial, sans-serif",
+                    fontWeight: 500,
+                    fontSize: "1.14rem"
+                  }}
                 >
-                  <span className={`w-7 h-7 flex items-center justify-center ${feature.iconColorClass}`}>{feature.icon}</span>
+                  <span
+                    className={`w-12 h-12 flex items-center justify-center rounded-full bg-white shadow-sm border ${feature.iconBgClass} ${feature.iconBorder}`}
+                    style={{ backgroundClip: 'padding-box', transition: "box-shadow .18s" }}
+                  >
+                    {feature.icon}
+                  </span>
                   <span className="ml-2">{feature.label}</span>
                 </button>
               ))}
