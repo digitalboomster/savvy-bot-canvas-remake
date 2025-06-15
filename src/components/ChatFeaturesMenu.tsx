@@ -44,7 +44,6 @@ const smartAssistantFeature: Feature = {
 };
 
 const features: Feature[] = [
-  // All others as before, but remove "capture-receipt"
   {
     key: "documents",
     label: "My Documents",
@@ -67,8 +66,7 @@ const features: Feature[] = [
     key: "upload",
     label: "Upload",
     icon: <Upload size={22} color="#4CAF50" />,
-    iconColorClass: "text-green-500",
-    highlighted: true
+    iconColorClass: "text-green-500"
   }
 ];
 
@@ -97,16 +95,8 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
         onMouseDown={e => e.stopPropagation()}
       >
         <div className="rounded-[24px] bg-[#fffbea] border border-[#e9ddb9] shadow-2xl overflow-hidden transition-all duration-300 max-w-full min-w-[320px] relative">
-          {/* Simple X close button top-right */}
-          <button
-            className="absolute right-4 top-4 text-gray-500 hover:text-gray-800 p-0 m-0 bg-transparent border-none"
-            style={{ lineHeight: 1, fontSize: 24, background: "none" }}
-            aria-label="Close features"
-            onClick={onClose}
-          >
-            <span className="sr-only">Close</span>
-            ×
-          </button>
+          {/* Removed X close button */}
+
           <div className="flex flex-col items-stretch px-0 pt-7 pb-4">
             {/* Smart Assistant Feature - card style */}
             <button
@@ -134,7 +124,7 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
                   key={feature.key}
                   className={`
                     flex items-center gap-3 w-full px-7 py-4 text-base font-semibold focus:outline-none transition
-                    ${feature.highlighted ? 'bg-yellow-100/90' : 'bg-white'}
+                    bg-white
                     hover:bg-yellow-50
                     text-gray-900
                     ${i === 0 ? "rounded-t-none" : ""}
