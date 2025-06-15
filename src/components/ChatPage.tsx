@@ -6,6 +6,7 @@ import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import DocumentViewerModal from "./DocumentViewerModal";
 import HealMeModal from "./HealMeModal";
+import SmartAssistantFeatures from "./SmartAssistantFeatures";
 
 // Message type
 interface Message {
@@ -25,6 +26,7 @@ const ChatPage = () => {
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const [showDocsViewer, setShowDocsViewer] = useState(false);
   const [showHealMe, setShowHealMe] = useState(false);
+  const [showSmartAssistantFeatures, setShowSmartAssistantFeatures] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -124,6 +126,9 @@ const ChatPage = () => {
     }
     if (featureKey === "heal-me") {
       setShowHealMe(true);
+    }
+    if (featureKey === "smart-assistant") {
+      setShowSmartAssistantFeatures(true);
     }
     // ... Optionally handle other features
   };
@@ -247,8 +252,22 @@ const ChatPage = () => {
               )}
             </button>
           </div>
+
+          {/* Smart Assistant Subpage */}
+          {showSmartAssistantFeatures && (
+            <SmartAssistantFeatures
+              onBack={() => setShowSmartAssistantFeatures(false)}
+              onFeatureSelect={(featureKey) => {
+                // Later you can route or show relevant modal here!
+                setShowSmartAssistantFeatures(false);
+                // Trigger the workflow for that feature (can be granular later)
+                handleSendMessage(`I want to use the ${featureKey} feature`);
+              }}
+            />
+          )}
+
           {/* Welcome Section */}
-          {showWelcome && (
+          {!showSmartAssistantFeatures && showWelcome && (
             <ChatWelcome
               isDarkMode={isDarkMode}
               starterPrompts={starterPrompts}
@@ -256,21 +275,23 @@ const ChatPage = () => {
             />
           )}
           {/* Chat messages area */}
-          <div className="flex-1 overflow-y-auto mt-2 mb-1 px-1 md:px-2">
-            <ChatMessages
-              messages={messages}
-              isAiTyping={isAiTyping}
-              isDarkMode={isDarkMode}
-              messagesEndRef={messagesEndRef}
-            />
-          </div>
+          {!showSmartAssistantFeatures && (
+            <div className="flex-1 overflow-y-auto mt-2 mb-1 px-1 md:px-2">
+              <ChatMessages
+                messages={messages}
+                isAiTyping={isAiTyping}
+                isDarkMode={isDarkMode}
+                messagesEndRef={messagesEndRef}
+              />
+            </div>
+          )}
           {/* Features Menu (Floating, not top app bar) */}
           <ChatFeaturesMenu
             open={showFeaturesMenu}
             onClose={() => setShowFeaturesMenu(false)}
             onFeatureClick={handleFeatureSelect}
           />
-          {/* Document Viewer Modal (still overlays) */}
+          {/* Document Viewer Modal */}
           <DocumentViewerModal
             open={showDocsViewer}
             onClose={handleCloseDocsAndShowFeatures}
@@ -281,19 +302,20 @@ const ChatPage = () => {
             onClose={() => setShowHealMe(false)}
             onMoodSelect={handleMoodSelect}
           />
-          {/* Chat input - sticky footer for touch UX */}
-          <div className="sticky bottom-0 w-full z-20 bg-white/85 backdrop-blur">
-            <ChatInput
-              inputText={inputText}
-              setInputText={setInputText}
-              onSend={handleSendMessage}
-              isDarkMode={isDarkMode}
-              featuresRotated={featuresRotated}
-              onFeaturesButtonClick={onFeaturesButtonClick}
-            />
-          </div>
+          {/* Chat input: only show if not on smart assistant subpage */}
+          {!showSmartAssistantFeatures && (
+            <div className="sticky bottom-0 w-full z-20 bg-white/85 backdrop-blur">
+              <ChatInput
+                inputText={inputText}
+                setInputText={setInputText}
+                onSend={handleSendMessage}
+                isDarkMode={isDarkMode}
+                featuresRotated={featuresRotated}
+                onFeaturesButtonClick={onFeaturesButtonClick}
+              />
+            </div>
+          )}
         </section>
-        {/* For a full-bleed look, add some safe-area below on mobile */}
         <div className="h-4 md:h-12" />
       </main>
     </div>
