@@ -17,8 +17,8 @@ const DocumentViewerModalControls: React.FC<DocumentViewerModalControlsProps> = 
   onClearSelection,
   onSelectAll,
 }) => (
-  <div className="flex items-center justify-between px-7 py-3 bg-[#fcf8ea] border-b border-[#efe2bc] gap-2">
-    <div className="flex items-center gap-2">
+  <div className="flex items-center justify-between px-7 py-4 bg-[#fcf8ea] border-b border-[#efe2bc] gap-2">
+    <div className="flex items-center gap-2 w-full justify-center">
       {selectedCount > 0 ? (
         <>
           <span className="text-gray-500 text-xs">{selectedCount} selected</span>
@@ -52,3 +52,4 @@ const DocumentViewerModalControls: React.FC<DocumentViewerModalControlsProps> = 
 );
 
 export default DocumentViewerModalControls;
+
