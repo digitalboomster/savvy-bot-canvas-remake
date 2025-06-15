@@ -1,5 +1,8 @@
+
 import React, { useRef, useEffect, useState } from "react";
 import { ArrowLeft, Camera, Upload } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Button } from "@/components/ui/button";
 
 interface CaptureReceiptPageProps {
   onBack: () => void;
@@ -12,6 +15,7 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isCameraReady, setCameraReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     let stream: MediaStream | null = null;
@@ -56,16 +60,21 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
     }
   };
 
+  const mainBg =
+    isDarkMode
+      ? "bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
+      : "bg-gradient-to-br from-gray-100 via-white to-gray-50 text-gray-900";
+
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-gray-100 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-black text-gray-900 dark:text-white transition-colors duration-300">
-      {/* Unified header to match chat */}
-      <div className="w-full max-w-md flex items-center justify-between px-1 py-4 border-b border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-md shadow-sm">
+    <div className={`min-h-screen flex flex-col items-center ${mainBg} transition-colors duration-300`}>
+      {/* Header - unified */}
+      <div className={`w-full max-w-md flex items-center justify-between px-1 py-4 border-b ${isDarkMode ? 'border-white/10' : 'border-black/10'} bg-white/80 dark:bg-black/50 backdrop-blur-md shadow-sm`}>
         <button
           onClick={onBack}
-          className="p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition"
+          className={`p-2 rounded-lg transition-colors duration-200 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'}`}
           aria-label="Back"
         >
-          <ArrowLeft size={22} className="text-neutral-950 dark:text-gray-300" />
+          <ArrowLeft size={22} className={isDarkMode ? "text-gray-300" : "text-neutral-950"} />
         </button>
         <h1 className="text-xl font-black tracking-tight text-neutral-900 dark:text-white text-center flex-1">Capture Receipt</h1>
         <span className="block w-[40px] h-[28px]" />
@@ -73,7 +82,7 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
       {/* Main container */}
       <main className="w-full flex flex-col items-center mt-8 px-4">
         <section
-          className="relative rounded-2xl flex items-center justify-center overflow-visible shadow-xl border border-black/10 dark:border-white/10 bg-[#181818]/90 dark:bg-black mb-8"
+          className={`relative rounded-2xl flex items-center justify-center overflow-visible shadow-xl border ${isDarkMode ? "border-white/10 bg-[#181818]/90" : "border-black/10 bg-white"} mb-8`}
           style={{
             width: FRAME_WIDTH,
             height: FRAME_HEIGHT,
@@ -130,21 +139,23 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
         </section>
         {/* Action Buttons */}
         <div className="w-full max-w-xs flex flex-col gap-3">
-          <button
-            className="flex items-center justify-center gap-2 w-full h-12 rounded-xl border-2 border-yellow-400 bg-yellow-300 hover:bg-yellow-200 text-black font-bold text-lg shadow transition active:scale-98"
-            aria-label="Capture Receipt"
+          <Button
+            className="w-full text-base font-bold flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg"
             onClick={handleCapture}
+            variant={isDarkMode ? "default" : "secondary"}
+            size="lg"
           >
             <Camera size={22} className="mr-1" />
             Capture Receipt
-          </button>
-          <button
-            className="flex items-center justify-center gap-2 w-full h-12 rounded-xl border-2 border-neutral-200 bg-neutral-900 hover:bg-neutral-800 text-white font-medium text-lg shadow transition active:scale-98"
-            aria-label="Upload from gallery"
+          </Button>
+          <Button
+            className="w-full text-base font-medium flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg"
+            variant={isDarkMode ? "outline" : "default"}
+            size="lg"
           >
             <Upload size={22} className="mr-1" />
             Upload from gallery
-          </button>
+          </Button>
         </div>
       </main>
     </div>
