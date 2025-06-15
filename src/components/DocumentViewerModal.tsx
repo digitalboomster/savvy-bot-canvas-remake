@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Trash2, CheckSquare, X, ChevronDown } from "lucide-react";
@@ -155,8 +154,6 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({ open, onClose
               }
               <div className="flex flex-col gap-0.5 mt-1">
                 <span className="font-semibold text-gray-800 leading-tight">{doc.name}</span>
-                <span className="text-xs text-gray-500">{doc.type}</span>
-                <span className="text-xs text-gray-500">{format(doc.added, "PP")}</span>
               </div>
               {selected.includes(doc.id) && (
                 <CheckSquare className="absolute bottom-3 right-4 text-yellow-500 bg-white rounded-full" size={20} />
