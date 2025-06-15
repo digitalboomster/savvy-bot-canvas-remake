@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 
@@ -22,6 +21,7 @@ export function useChatModals() {
     if (featureKey === "documents") setShowDocsViewer(true);
     if (featureKey === "heal-me") setShowHealMe(true);
     if (featureKey === "upload") setShowUploadDocumentPage(true);
+    setShowFeaturesMenu(false);
     // ... option for additional features
   };
 

@@ -7,6 +7,7 @@ import ChatWelcome from './ChatWelcome';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import DocumentViewerModal from './DocumentViewerModal';
+import UploadDocumentModal from './UploadDocumentModal';
 import HealMeModal from "./HealMeModal";
 import CaptureReceiptPage from "./CaptureReceiptPage";
 import UploadDocumentPage from "./UploadDocumentPage";
@@ -82,15 +83,6 @@ const ChatPage = () => {
     );
   }
 
-  // Render upload document page when upload is triggered
-  if (showUploadDocumentPage) {
-    return (
-      <UploadDocumentPage
-        onBack={() => setShowUploadDocumentPage(false)}
-      />
-    );
-  }
-
   return (
     <div className={`${themeClasses} flex flex-col`}>
       <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
@@ -116,6 +108,7 @@ const ChatPage = () => {
       />
 
       <DocumentViewerModal open={showDocsViewer} onClose={handleCloseDocsAndShowFeatures} />
+      <UploadDocumentModal open={showUploadDocumentPage} onClose={() => setShowUploadDocumentPage(false)} />
       <HealMeModal
         open={showHealMe}
         onClose={() => setShowHealMe(false)}
