@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { X, MoreVertical, MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import ConversationHistory from './ConversationHistory';
 
 interface Conversation {
@@ -11,6 +11,7 @@ interface Conversation {
 }
 
 const ChatInterface = () => {
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState<Conversation[]>([
     {
       id: '1',
@@ -35,6 +36,7 @@ const ChatInterface = () => {
     };
     setConversations([newConversation, ...conversations]);
     console.log('Starting new conversation:', newConversation);
+    navigate('/chat');
   };
 
   return (
