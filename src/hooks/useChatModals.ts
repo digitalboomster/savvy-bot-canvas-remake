@@ -10,6 +10,7 @@ export function useChatModals() {
   const [showDocsViewer, setShowDocsViewer] = useState(false);
   const [showHealMe, setShowHealMe] = useState(false);
   const [showCaptureReceipt, setShowCaptureReceipt] = useState(false);
+  const [showUploadDocumentPage, setShowUploadDocumentPage] = useState(false);
 
   // Handler for features menu option click
   const handleFeatureSelect = (featureKey: string) => {
@@ -20,6 +21,7 @@ export function useChatModals() {
     }
     if (featureKey === "documents") setShowDocsViewer(true);
     if (featureKey === "heal-me") setShowHealMe(true);
+    if (featureKey === "upload") setShowUploadDocumentPage(true);
     // ... option for additional features
   };
 
@@ -59,6 +61,7 @@ export function useChatModals() {
     showDocsViewer, setShowDocsViewer,
     showHealMe, setShowHealMe,
     showCaptureReceipt, setShowCaptureReceipt,
+    showUploadDocumentPage, setShowUploadDocumentPage,
     handleFeatureSelect,
     handleMoodSelect,
     handleCloseDocsAndShowFeatures,

@@ -9,6 +9,7 @@ import ChatInput from './ChatInput';
 import DocumentViewerModal from './DocumentViewerModal';
 import HealMeModal from "./HealMeModal";
 import CaptureReceiptPage from "./CaptureReceiptPage";
+import UploadDocumentPage from "./UploadDocumentPage";
 import { toast } from "@/hooks/use-toast";
 import { useChat } from "@/hooks/useChat";
 import { useChatModals } from "@/hooks/useChatModals";
@@ -49,6 +50,7 @@ const ChatPage = () => {
     showDocsViewer, setShowDocsViewer,
     showHealMe, setShowHealMe,
     showCaptureReceipt, setShowCaptureReceipt,
+    showUploadDocumentPage, setShowUploadDocumentPage,
     handleFeatureSelect,
     handleMoodSelect,
     handleCloseDocsAndShowFeatures,
@@ -76,6 +78,15 @@ const ChatPage = () => {
     return (
       <CaptureReceiptPage
         onBack={() => setShowCaptureReceipt(false)}
+      />
+    );
+  }
+
+  // Render upload document page when upload is triggered
+  if (showUploadDocumentPage) {
+    return (
+      <UploadDocumentPage
+        onBack={() => setShowUploadDocumentPage(false)}
       />
     );
   }
