@@ -1,5 +1,7 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTheme } from '@/contexts/ThemeContext';
 import ChatFeaturesMenu from './ChatFeaturesMenu';
 import ChatHeader from './ChatHeader';
 import ChatWelcome from './ChatWelcome';
@@ -23,7 +25,6 @@ const ChatPage = () => {
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [featuresRotated, setFeaturesRotated] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const [showDocsViewer, setShowDocsViewer] = useState(false);
   const [showHealMe, setShowHealMe] = useState(false);
@@ -38,6 +39,9 @@ const ChatPage = () => {
     "I'm feeling stressed about my finances.",
     "I want to track my spending"
   ];
+
+  // ---- Use theme from context! ----
+  const { isDarkMode, toggleTheme } = useTheme();
 
   // Scroll to latest message or typing
   useEffect(() => {
@@ -105,8 +109,6 @@ const ChatPage = () => {
     handleSendMessage(prompt);
   };
 
-  const toggleTheme = () => setIsDarkMode((d) => !d);
-
   const themeClasses = isDarkMode 
     ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
     : "min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-50 text-gray-900";
@@ -142,8 +144,6 @@ const ChatPage = () => {
   const handleMoodSelect = (mood) => {
     setShowHealMe(false);
     // Optionally send message to AI or set state for further UI
-    // e.g. handleSendMessage(`I am feeling ${mood}`);
-    // Leave the actual backend/AI flow to user's logic as requested
   };
 
   const handleCloseDocsAndShowFeatures = () => {
@@ -163,8 +163,6 @@ const ChatPage = () => {
   return (
     <div className={`${themeClasses} flex flex-col`}>
       <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-
-      {/* Welcome Section */}
       {showWelcome && (
         <ChatWelcome 
           isDarkMode={isDarkMode}
@@ -173,7 +171,6 @@ const ChatPage = () => {
         />
       )}
 
-      {/* Messages */}
       <ChatMessages
         messages={messages}
         isAiTyping={isAiTyping}
@@ -181,24 +178,19 @@ const ChatPage = () => {
         messagesEndRef={messagesEndRef}
       />
 
-      {/* Features Floating Menu */}
       <ChatFeaturesMenu
         open={showFeaturesMenu}
         onClose={() => setShowFeaturesMenu(false)}
         onFeatureClick={handleFeatureSelect}
       />
 
-      {/* Document Viewer Modal */}
       <DocumentViewerModal open={showDocsViewer} onClose={handleCloseDocsAndShowFeatures} />
-
-      {/* Heal Me Modal */}
       <HealMeModal
         open={showHealMe}
         onClose={() => setShowHealMe(false)}
         onMoodSelect={handleMoodSelect}
       />
 
-      {/* Input Area */}
       <ChatInput
         inputText={inputText}
         setInputText={setInputText}
