@@ -1,7 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Mic, Plus } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ChatFeaturesMenu from './ChatFeaturesMenu';
 
 interface Message {
   id: string;
@@ -17,6 +17,7 @@ const ChatPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [featuresRotated, setFeaturesRotated] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -103,6 +104,24 @@ const ChatPage = () => {
   const themeClasses = isDarkMode 
     ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
     : "min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-50 text-gray-900";
+
+  // Add handler for feature select (no navigation, just log for now)
+  const handleFeatureSelect = (featureKey: string) => {
+    // TODO: you can wire up navigation or modals here
+    console.log(`Feature selected: ${featureKey}`);
+  };
+
+  // Close menu on outside click/esc
+  useEffect(() => {
+    if (!showFeaturesMenu) return;
+    const handle = () => setShowFeaturesMenu(false);
+    window.addEventListener("mousedown", handle);
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") handle(); });
+    return () => {
+      window.removeEventListener("mousedown", handle);
+      window.removeEventListener("keydown", (e) => { if (e.key === "Escape") handle(); });
+    };
+  }, [showFeaturesMenu]);
 
   return (
     <div className={`${themeClasses} flex flex-col`}>
@@ -224,15 +243,24 @@ const ChatPage = () => {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Features Floating Menu */}
+      <ChatFeaturesMenu
+        open={showFeaturesMenu}
+        onClose={() => setShowFeaturesMenu(false)}
+        onFeatureClick={handleFeatureSelect}
+      />
+
       {/* Input Area */}
       <div className={`p-4 border-t ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
         <div className="flex items-center gap-3">
           {/* Features Button (Cross/Plus that rotates) */}
           <button
-            onClick={handleFeaturesClick}
+            onClick={() => setShowFeaturesMenu(v => !v)}
             className={`p-3 ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-full transition-all duration-200 ${
               featuresRotated ? 'rotate-45' : ''
             }`}
+            aria-label="Show chat features"
+            type="button"
           >
             <Plus size={20} className={isDarkMode ? "text-gray-300" : "text-gray-600"} />
           </button>
