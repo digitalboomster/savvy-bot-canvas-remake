@@ -25,7 +25,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
       {messages.map((message) => {
         // Conditional classes for message bubbles
         const bubbleClasses = message.isUser
-          ? `ml-auto ${isDarkMode ? "bg-gray-600 text-white" : "bg-black text-white"}`
+          ? `ml-auto ${isDarkMode ? "bg-blue-600 text-white" : "bg-black text-white"}`
           : isDarkMode
             ? "bg-gray-800 text-white"
             : "bg-gray-100 text-black";
