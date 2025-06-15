@@ -30,7 +30,8 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
   const [isCameraReady, setCameraReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [fileInput, setFileInput] = useState<HTMLInputElement | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
@@ -60,14 +61,12 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
     };
   }, []);
 
-  // Capture photo from camera and upload to backend
   const handleCapture = async () => {
     if (!videoRef.current || !isCameraReady) return;
     try {
       setUploading(true);
-      // Draw current frame to canvas
       const canvas = document.createElement('canvas');
-      canvas.width = FRAME_WIDTH - 40; // match inner frame size
+      canvas.width = FRAME_WIDTH - 40;
       canvas.height = FRAME_HEIGHT - 40;
       const ctx = canvas.getContext('2d');
       ctx?.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
@@ -95,7 +94,7 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
     }
   };
 
-  // Handle file upload from gallery
+  // Handle file upload from gallery for images only
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -119,7 +118,7 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
       });
     } finally {
       setUploading(false);
-      if (fileInput) fileInput.value = "";
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -145,7 +144,7 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
       {/* Main container */}
       <main className="w-full flex flex-col items-center mt-8 px-4">
         <section
-          className={`relative rounded-2xl flex items-center justify-center overflow-visible shadow-xl border ${isDarkMode ? "border-white/10 bg-[#181818]/90" : "border-black/10 bg-white"} mb-8`}
+          className={`relative rounded-2xl flex items-center justify-center overflow-visible shadow-xl border ${isDarkMode ? "border-white/10 bg-[#181818]/90" : "border-black/10 bg-white"} mb-6`}
           style={{
             width: FRAME_WIDTH,
             height: FRAME_HEIGHT,
@@ -158,9 +157,10 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
             isDarkMode={isDarkMode}
           />
         </section>
-        <div className="w-full max-w-xs flex flex-col gap-3">
+        <div className="w-full max-w-xs grid grid-cols-1 sm:grid-cols-2 gap-3 ">
+          {/* Camera Capture Button */}
           <Button
-            className="w-full text-base font-bold flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg"
+            className="text-base font-bold flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg"
             onClick={handleCapture}
             variant={isDarkMode ? "default" : "secondary"}
             size="lg"
@@ -169,26 +169,28 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
             <Camera size={22} className="mr-1" />
             {uploading ? "Uploading..." : "Capture Receipt"}
           </Button>
+          {/* Upload from Gallery Button */}
           <Button
-            className="w-full text-base font-medium flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg relative"
+            className="text-base font-medium flex items-center justify-center gap-2 h-12 rounded-xl shadow-lg relative"
             variant={isDarkMode ? "outline" : "default"}
             size="lg"
-            asChild
+            type="button"
+            onClick={() => {
+              if (fileInputRef.current) fileInputRef.current.click();
+            }}
           >
-            <>
-              <Upload size={22} className="mr-1" />
-              Upload from gallery
-              <input
-                type="file"
-                accept="image/*"
-                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-                style={{ zIndex: 2 }}
-                tabIndex={-1}
-                ref={input => setFileInput(input)}
-                onChange={handleFileChange}
-                disabled={uploading}
-              />
-            </>
+            <Upload size={22} className="mr-1" />
+            Upload from Gallery
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+              style={{ zIndex: 2 }}
+              tabIndex={-1}
+              onChange={handleFileChange}
+              disabled={uploading}
+            />
           </Button>
         </div>
       </main>
