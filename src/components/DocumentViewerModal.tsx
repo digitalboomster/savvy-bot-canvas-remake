@@ -1,9 +1,8 @@
+
 import React, { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Trash2, CheckSquare, X, ChevronDown } from "lucide-react";
-import { format } from "date-fns";
 
-// ----------- MOCKED DATA ----------------
 type DocType = "Note" | "PDF" | "Scan";
 type Document = {
   id: number;
@@ -13,7 +12,7 @@ type Document = {
   previewImg?: string;
 };
 
-const mockDocs: Document[] = [
+const initialMockDocs: Document[] = [
   {
     id: 1,
     name: "Roadmap",
@@ -37,33 +36,44 @@ const mockDocs: Document[] = [
   },
 ];
 
-// ----------- MAIN MODAL COMPONENT ----------------
 interface DocumentViewerModalProps {
   open: boolean;
   onClose: () => void;
 }
-const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({ open, onClose }) => {
-  const [sortBy, setSortBy] = useState<'date' | 'type'>('date');
+
+const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
+  open,
+  onClose,
+}) => {
+  // Store docs in state for deletable UI
+  const [docs, setDocs] = useState<Document[]>(initialMockDocs);
+  const [sortBy, setSortBy] = useState<"date" | "type">("date");
   const [selected, setSelected] = useState<number[]>([]);
 
-  // Sort docs
-  const docs = [...mockDocs].sort((a, b) => {
+  React.useEffect(() => {
+    if (open) {
+      setDocs(initialMockDocs);
+      setSelected([]);
+    }
+  }, [open]);
+
+  // Sorting logic
+  const displayDocs = [...docs].sort((a, b) => {
     if (sortBy === "date") return b.added.getTime() - a.added.getTime();
     if (sortBy === "type") return a.type.localeCompare(b.type) || b.added.getTime() - a.added.getTime();
     return 0;
   });
 
-  // Toggle selection
+  // Select logic
   const toggleSelect = (id: number) =>
-    setSelected((curr) => curr.includes(id)
-      ? curr.filter(sid => sid !== id)
-      : [...curr, id]
+    setSelected((curr) =>
+      curr.includes(id) ? curr.filter((sid) => sid !== id) : [...curr, id]
     );
-  const selectAll = () => setSelected(docs.map(doc => doc.id));
+  const selectAll = () => setSelected(displayDocs.map((doc) => doc.id));
   const clearSelection = () => setSelected([]);
   const handleDeleteSelected = () => {
-    // For demo: NOT actually deleting mockDocs
-    clearSelection();
+    setDocs((prev) => prev.filter((doc) => !selected.includes(doc.id)));
+    setSelected([]);
   };
 
   return (
@@ -72,7 +82,7 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({ open, onClose
         {/* Header */}
         <div className="flex flex-row items-center justify-between px-7 pt-6 pb-3 border-b border-[#efe2bc] bg-[#fffbea]">
           <span className="font-bold text-lg text-gray-800">My Documents</span>
-          <button 
+          <button
             className="hover:bg-yellow-100 rounded-full transition p-2 ml-2"
             onClick={onClose}
             aria-label="Close"
@@ -81,7 +91,7 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({ open, onClose
             <X size={23} />
           </button>
         </div>
-        
+
         {/* Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-7 py-3 bg-[#fcf8ea] border-b border-[#efe2bc] gap-2">
           {/* Sorting */}
@@ -98,38 +108,41 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({ open, onClose
           </div>
           {/* Selection/Deletion */}
           <div className="flex items-center gap-2">
-            {selected.length > 0
-              ? (
-                <>
-                  <span className="text-gray-500 text-xs">{selected.length} selected</span>
-                  <button
-                    className="text-xs flex items-center gap-1 text-red-600 px-2.5 py-1.5 rounded-md border border-red-200 bg-white hover:bg-red-50 transition"
-                    onClick={handleDeleteSelected}
-                    type="button"
-                  >
-                    <Trash2 size={15} /> Delete
-                  </button>
-                  <button
-                    className="text-xs text-gray-600 rounded-md px-2.5 py-1.5 border border-gray-200 bg-white hover:bg-yellow-50 transition"
-                    onClick={clearSelection}
-                    type="button"
-                  >Clear</button>
-                </>
-              ) : (
+            {selected.length > 0 ? (
+              <>
+                <span className="text-gray-500 text-xs">{selected.length} selected</span>
+                <button
+                  className="text-xs flex items-center gap-1 text-red-600 px-2.5 py-1.5 rounded-md border border-red-200 bg-white hover:bg-red-50 transition"
+                  onClick={handleDeleteSelected}
+                  type="button"
+                >
+                  <Trash2 size={15} /> Delete
+                </button>
                 <button
                   className="text-xs text-gray-600 rounded-md px-2.5 py-1.5 border border-gray-200 bg-white hover:bg-yellow-50 transition"
-                  onClick={selectAll}
+                  onClick={clearSelection}
                   type="button"
-                >Select All</button>
-              )
-            }
+                >
+                  Clear
+                </button>
+              </>
+            ) : (
+              <button
+                className="text-xs text-gray-600 rounded-md px-2.5 py-1.5 border border-gray-200 bg-white hover:bg-yellow-50 transition"
+                onClick={selectAll}
+                type="button"
+              >
+                Select All
+              </button>
+            )}
           </div>
         </div>
-        
+
         {/* Document Previews */}
         <div className="p-7 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-6 max-h-[420px] overflow-y-auto">
-          {docs.map(doc => (
-            <div key={doc.id}
+          {displayDocs.map((doc) => (
+            <div
+              key={doc.id}
               className={`
                 relative p-4 pt-7 rounded-2xl border border-[#efe2bc] bg-white transition-shadow shadow-sm
                 ${selected.includes(doc.id) ? "ring-2 ring-yellow-400" : ""}
@@ -143,15 +156,34 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({ open, onClose
             >
               {/* Bookmark tab */}
               <span className="absolute top-3 right-3">
-                <svg width={24} height={24} fill="none" stroke="#CAA443" strokeWidth={2.2} viewBox="0 0 24 24">
-                  <rect x={19} y={3} width={3} height={18} rx={1.5} fill="#FFE082" stroke="none"/>
+                <svg
+                  width={24}
+                  height={24}
+                  fill="none"
+                  stroke="#CAA443"
+                  strokeWidth={2.2}
+                  viewBox="0 0 24 24"
+                >
+                  <rect
+                    x={19}
+                    y={3}
+                    width={3}
+                    height={18}
+                    rx={1.5}
+                    fill="#FFE082"
+                    stroke="none"
+                  />
                   <path d="M5 3a2 2 0 0 0-2 2v14.5a1 1 0 0 0 1.52.86l6.48-3.7 6.48 3.7A1 1 0 0 0 21 19.5V5a2 2 0 0 0-2-2H5z" />
                 </svg>
               </span>
               {/* Preview Img */}
-              {doc.previewImg &&
-                <img src={doc.previewImg} alt="Preview" className="rounded-md border border-[#efe2bc] object-cover w-full h-24 mb-3 mx-auto" />
-              }
+              {doc.previewImg && (
+                <img
+                  src={doc.previewImg}
+                  alt="Preview"
+                  className="rounded-md border border-[#efe2bc] object-cover w-full h-24 mb-3 mx-auto"
+                />
+              )}
               <div className="flex flex-col gap-0.5 mt-1">
                 <span className="font-semibold text-gray-800 leading-tight">{doc.name}</span>
               </div>
@@ -160,9 +192,11 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({ open, onClose
               )}
             </div>
           ))}
-          {docs.length === 0 &&
-            <div className="text-center text-gray-400 col-span-2">No documents</div>
-          }
+          {displayDocs.length === 0 && (
+            <div className="text-center text-gray-400 col-span-2">
+              No documents
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
