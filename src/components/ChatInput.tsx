@@ -11,7 +11,16 @@ interface ChatInputProps {
   onFeaturesButtonClick: () => void;
 }
 
-const BACKEND_URL = "https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev";
+// Utility to check if SpeechRecognition is available
+function getSpeechRecognition() {
+  // @ts-ignore
+  return (
+    window.SpeechRecognition ||
+    // @ts-ignore
+    window.webkitSpeechRecognition ||
+    null
+  );
+}
 
 const ChatInput: React.FC<ChatInputProps> = ({
   inputText,
@@ -23,57 +32,62 @@ const ChatInput: React.FC<ChatInputProps> = ({
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [loadingTranscript, setLoadingTranscript] = useState(false);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunks = useRef<Blob[]>([]);
+  const [recognitionError, setRecognitionError] = useState<string | null>(null);
+  const recognitionRef = useRef<any>(null);
 
-  // Start/stop recording for transcription
-  const handleMicClick = async () => {
+  // Start/stop recording for transcription using Web Speech API
+  const handleMicClick = () => {
+    setRecognitionError(null);
+    const SpeechRecognition = getSpeechRecognition();
+    if (!SpeechRecognition) {
+      setRecognitionError("Microphone transcription not supported in this browser.");
+      return;
+    }
     if (isRecording) {
-      mediaRecorderRef.current?.stop();
+      // Stop recognition and finalise
+      recognitionRef.current?.stop();
       setIsRecording(false);
       return;
     }
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = recorder;
-      audioChunks.current = [];
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunks.current.push(event.data);
-        }
-      };
-      recorder.onstop = async () => {
-        setLoadingTranscript(true);
-        const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
-        const formData = new FormData();
-        formData.append("audio", audioBlob, "audio.webm");
+      const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = "en-US";
+      setLoadingTranscript(false);
 
-        try {
-          const response = await fetch(`${BACKEND_URL}/transcribe`, {
-            method: "POST",
-            body: formData
-          });
-          const result = await response.json();
-          if (result.transcription) {
-            setInputText(result.transcription);
+      let finalTranscript = "";
+
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
+        let interimTranscript = "";
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript + " ";
           } else {
-            setInputText("");
-          }
-        } catch {
-          setInputText("");
-        } finally {
-          setLoadingTranscript(false);
-          if (stream) {
-            stream.getTracks().forEach(track => track.stop());
+            interimTranscript += event.results[i][0].transcript;
           }
         }
+        setInputText((finalTranscript + interimTranscript).trim());
       };
-      recorder.start();
+
+      recognition.onerror = (event: any) => {
+        setRecognitionError("Mic error: " + (event.error || "unknown error"));
+        setIsRecording(false);
+        setLoadingTranscript(false);
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+        setLoadingTranscript(false);
+      };
+
+      recognition.start();
       setIsRecording(true);
     } catch (err) {
-      // Denied mic permissions or failed
+      setRecognitionError("Failed to start microphone.");
       setIsRecording(false);
+      setLoadingTranscript(false);
     }
   };
 
@@ -119,8 +133,19 @@ const ChatInput: React.FC<ChatInputProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Show transcription or browser errors */}
+      {recognitionError && (
+        <div className="mt-2 text-sm text-red-500">{recognitionError}</div>
+      )}
+      {isRecording && (
+        <div className="mt-2 text-xs text-yellow-700 dark:text-yellow-200 animate-pulse">
+          Listening... Speak now and tap mic to stop.
+        </div>
+      )}
     </div>
   );
 };
 
 export default ChatInput;
+
