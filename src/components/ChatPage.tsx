@@ -1,8 +1,7 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Mic, Plus, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Mic, Plus } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from './ui/dropdown-menu';
-import { useTheme } from '../context/ThemeContext';
 
 interface Message {
   id: string;
@@ -17,11 +16,10 @@ const ChatPage = () => {
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [featuresRotated, setFeaturesRotated] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { isDark, toggleTheme } = useTheme();
 
   const starterPrompts = [
     "How can I start saving money",
@@ -98,64 +96,75 @@ const ChatPage = () => {
     setFeaturesRotated(!featuresRotated);
   };
 
-  const themeClasses = isDark 
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const themeClasses = isDarkMode 
     ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white"
     : "min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-50 text-gray-900";
 
   return (
     <div className={`${themeClasses} flex flex-col`}>
       {/* Header */}
-      <div className={`flex items-center justify-between p-4 border-b ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+      <div className={`flex items-center justify-between p-4 border-b ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
         <button 
           onClick={() => navigate('/')}
-          className={`p-2 hover:${isDark ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
+          className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
         >
-          <ChevronLeft size={28} className={isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
+          <ArrowLeft size={24} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
         </button>
         <h1 className="text-xl font-semibold">Savvy Bot</h1>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              className={`p-2 hover:${isDark ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
-            >
-              <MoreVertical size={24} className={isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className={isDark ? "bg-gray-900 text-white border-gray-700" : "bg-white text-gray-900 border-gray-200"}>
-            <DropdownMenuItem onClick={toggleTheme}>
-              {isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <button 
+          onClick={toggleTheme}
+          className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
+        >
+          <div className="flex flex-col gap-1">
+            <div className={`w-1 h-1 ${isDarkMode ? 'bg-gray-300' : 'bg-gray-600'} rounded-full`}></div>
+            <div className={`w-1 h-1 ${isDarkMode ? 'bg-gray-300' : 'bg-gray-600'} rounded-full`}></div>
+            <div className={`w-1 h-1 ${isDarkMode ? 'bg-gray-300' : 'bg-gray-600'} rounded-full`}></div>
+          </div>
+        </button>
       </div>
 
-      {/* Welcome Section (no privacy message) */}
+      {/* Welcome Section */}
       {showWelcome && (
         <div className="p-6 space-y-6">
-          {/* AI Welcome Speech Bubble */}
-          <div className="flex justify-start">
-            <div className="max-w-[80%] bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-300 shadow-md p-4 rounded-2xl border border-yellow-200/80 text-gray-900 font-medium relative">
-              <span className="absolute -left-1 top-4 h-4 w-4 bg-yellow-400 rounded-full blur-sm opacity-40 -z-10" />
-              <div className="flex items-start gap-3">
-                {/* Avatar (blank for now) */}
-                <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-                  <span className="text-lg">🤖</span>
-                </div>
-                <div className="flex-1">
-                  <p className="">
-                    Hey there! 👋 I'm Savvy, your smart assistant here on SavvyBee — built to help you take control of your money, one simple step at a time.
-                  </p>
-                </div>
+          {/* Privacy Message */}
+          <div className={`${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-2xl p-6`}>
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
+                <span className="text-lg">🤖</span>
+              </div>
+              <div className="flex-1">
+                <p className={`${isDarkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
+                  This is private message, between you and buddy. This chat is end to end encrypted...
+                </p>
               </div>
             </div>
           </div>
+
+          {/* AI Welcome Message */}
+          <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white shadow-sm border border-gray-200'} rounded-2xl p-4`}>
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
+                <span className="text-lg">🤖</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-gray-800">
+                  Hey there! 👋 I'm Savvy, your smart assistant here on SavvyBee — built to help you take control of your money, one simple step at a time.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Starter Prompts */}
           <div className="grid grid-cols-2 gap-3">
             {starterPrompts.map((prompt, index) => (
               <button
                 key={index}
                 onClick={() => handlePromptClick(prompt)}
-                className={`${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 text-left transition-all duration-200 text-sm`}
+                className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 text-left transition-all duration-200 text-sm`}
               >
                 {prompt}
               </button>
@@ -180,10 +189,10 @@ const ChatPage = () => {
               <div
                 className={`px-4 py-3 rounded-2xl ${
                   message.isUser
-                    ? isDark 
+                    ? isDarkMode 
                       ? 'bg-gray-700 text-white ml-auto'
                       : 'bg-blue-500 text-white ml-auto'
-                    : isDark 
+                    : isDarkMode 
                       ? 'bg-gray-100 text-gray-800'
                       : 'bg-white text-gray-800 border border-gray-200'
                 }`}
@@ -201,7 +210,7 @@ const ChatPage = () => {
               <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
                 <span className="text-lg">🤖</span>
               </div>
-              <div className={`${isDark ? 'bg-gray-100' : 'bg-white border border-gray-200'} px-4 py-3 rounded-2xl`}>
+              <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white border border-gray-200'} px-4 py-3 rounded-2xl`}>
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
                   <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -216,33 +225,33 @@ const ChatPage = () => {
       </div>
 
       {/* Input Area */}
-      <div className={`p-4 border-t ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+      <div className={`p-4 border-t ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
         <div className="flex items-center gap-3">
           {/* Features Button (Cross/Plus that rotates) */}
           <button
             onClick={handleFeaturesClick}
-            className={`p-3 ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-full transition-all duration-200 ${
+            className={`p-3 ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-full transition-all duration-200 ${
               featuresRotated ? 'rotate-45' : ''
             }`}
           >
-            <Plus size={20} className={isDark ? "text-gray-300" : "text-gray-600"} />
+            <Plus size={20} className={isDarkMode ? "text-gray-300" : "text-gray-600"} />
           </button>
 
           {/* Input Field */}
-          <div className={`flex-1 flex items-center ${isDark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-full px-4 py-2`}>
+          <div className={`flex-1 flex items-center ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-full px-4 py-2`}>
             <input
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(inputText)}
               placeholder="Message to Savvy..."
-              className={`flex-1 bg-transparent ${isDark ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'} outline-none px-2`}
+              className={`flex-1 bg-transparent ${isDarkMode ? 'text-white placeholder-gray-400' : 'text-gray-900 placeholder-gray-500'} outline-none px-2`}
             />
             <button
               onClick={() => handleSendMessage(inputText)}
-              className={`p-2 hover:${isDark ? 'bg-white/10' : 'bg-black/10'} rounded-full transition-colors duration-200`}
+              className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-full transition-colors duration-200`}
             >
-              <Mic size={20} className={isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
+              <Mic size={20} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
             </button>
           </div>
         </div>
