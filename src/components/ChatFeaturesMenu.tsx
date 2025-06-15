@@ -149,3 +149,4 @@ const ChatFeaturesMenu: React.FC<ChatFeaturesMenuProps> = ({
 };
 
 export default ChatFeaturesMenu;
+
