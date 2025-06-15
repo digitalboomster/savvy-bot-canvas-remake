@@ -44,10 +44,10 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
           <div
             className={`max-w-[65%] px-4 py-3 rounded-[18px] ${
               message.isUser
-                ? "bg-yellow-400 text-black ml-auto"
+                ? "bg-black text-white ml-auto"
                 : isDarkMode
                   ? "bg-gray-800 text-white"
-                  : "bg-white text-black border border-gray-200"
+                  : "bg-gray-100 text-black"
             }`}
             style={{
               borderTopLeftRadius: !message.isUser ? 6 : 18,
@@ -77,7 +77,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             className={`px-4 py-3 rounded-[18px] ${
               isDarkMode
                 ? "bg-gray-800 text-white"
-                : "bg-white text-black border border-gray-200"
+                : "bg-gray-100 text-black"
             }`}
             style={{
               borderTopLeftRadius: 6,
