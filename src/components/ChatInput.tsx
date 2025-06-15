@@ -19,7 +19,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   featuresRotated,
   onFeaturesButtonClick
 }) => (
-  <div className={`w-full px-0 pb-4 pt-2 bg-transparent`}>
+  <div className="w-full px-0 pb-4 pt-2 bg-transparent">
     <div className="flex items-end justify-center w-full">
       <div className="relative w-full max-w-[402px] flex items-center">
         {/* Plus Button */}
@@ -27,9 +27,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onClick={onFeaturesButtonClick}
           aria-label="Show chat features"
           type="button"
-          className={`absolute left-4 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full flex items-center justify-center border-none transition transform-gpu
-            ${isDarkMode ? 'bg-[#E8E9EB] hover:bg-[#C5C5C7]' : 'bg-[#E8E9EB] hover:bg-[#C5C5C7]'}
-            ${featuresRotated ? 'rotate-45' : ''}
+          className={`absolute left-4 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full flex items-center justify-center border-none bg-[#E8E9EB] hover:bg-[#C5C5C7] 
+            transition ${featuresRotated ? 'rotate-45' : ''}
           `}
           style={{outline: 'none'}}
         >
@@ -37,16 +36,12 @@ const ChatInput: React.FC<ChatInputProps> = ({
         </button>
         {/* Input Field */}
         <div
-          className={`mx-auto w-[328px] pl-14 pr-12 py-2.5 rounded-full
-            border outline-none focus-within:outline-none
-            ${isDarkMode
-              ? 'bg-white dark:bg-[#181818]/90 border-[#C5C5C7] shadow'
-              : 'bg-white border-[#C5C5C7] shadow'}
-            flex items-center
-            transition-all
-            font-manrope
-          `}
-          style={{outlineWidth: '1px', outlineOffset: '-1px'}}
+          className={`mx-auto w-[328px] min-h-[36px] pl-14 pr-12 py-2.5 rounded-full border focus-within:border-[#C5C5C7] border-[#C5C5C7] bg-white flex items-center font-manrope transition-all`}
+          style={{
+            outline: '1px #C5C5C7 solid',
+            outlineOffset: '-1px',
+            fontFamily: "'Manrope', sans-serif"
+          }}
         >
           <input
             type="text"
@@ -55,9 +50,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
             onKeyDown={(e) => e.key === 'Enter' && onSend(inputText)}
             placeholder="Message to Savvy..."
             className="w-full border-none bg-transparent px-0 text-[14px] font-normal outline-none focus:outline-none placeholder:text-[#C5C5C7] text-[#1A1D20] font-manrope"
-            style={{
-              fontFamily: "'Manrope', sans-serif"
-            }}
           />
         </div>
         {/* Mic Button */}
