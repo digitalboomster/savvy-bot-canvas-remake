@@ -1,9 +1,8 @@
 
 import React, { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Trash2, CheckSquare, ChevronDown } from "lucide-react";
+import { Trash2, CheckSquare, ChevronDown, ChevronLeft } from "lucide-react";
 
-// Removed: type DocType, since type is unused now.
 type Document = {
   id: number;
   name: string;
@@ -57,26 +56,38 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-[#fffcf4] border-[#e9ddb9] rounded-3xl p-0 shadow-xl">
-        {/* Dialog Title for accessibility */}
         <span className="sr-only">
           <span id="my-documents-modal-title">My Documents</span>
         </span>
         {/* Header */}
-        <div className="flex flex-row items-center justify-between px-7 pt-6 pb-3 border-b border-[#efe2bc] bg-[#fffbea]">
-          <span className="font-bold text-lg text-gray-800" id="my-documents-modal-title">
+        <div className="flex flex-row items-center justify-between px-7 pt-6 pb-3 border-b border-[#efe2bc] bg-[#fffbea] relative">
+          {/* Back button (chevron left) */}
+          <button
+            onClick={onClose}
+            aria-label="Back to Features"
+            className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full hover:bg-yellow-100 transition p-1.5 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+            style={{ lineHeight: 0 }}
+            type="button"
+          >
+            <ChevronLeft size={23} className="text-yellow-700" />
+          </button>
+          <span className="font-bold text-lg text-gray-800 mx-auto" id="my-documents-modal-title">
             My Documents
           </span>
+          {/* Placeholding space for layout - invisible but same size as left button */}
+          <span className="w-[38px] h-[38px]"></span>
         </div>
 
         {/* Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-7 py-3 bg-[#fcf8ea] border-b border-[#efe2bc] gap-2">
           {/* Sorting */}
-          <div className="flex flex-row items-center gap-2 mb-1 sm:mb-0">
-            <span className="text-gray-700 text-sm">Sort by</span>
+          <div className="flex items-center gap-2 mb-1 sm:mb-0">
+            <span className="text-gray-700 text-sm font-medium">Sort by</span>
             <button
               onClick={() => setSortBy(sortBy === "date" ? "type" : "date")}
-              className="flex items-center gap-1 px-3 py-1.5 border border-[#e9ddb9] bg-white rounded-lg text-gray-700 hover:bg-yellow-100 transition text-sm shadow-sm"
+              className="flex items-center gap-1 px-3 py-1 border border-[#e9ddb9] bg-white rounded-lg text-gray-700 hover:bg-yellow-100 transition text-sm font-medium shadow-sm h-9"
               type="button"
+              style={{ minWidth: 110 }}
             >
               {sortBy === "date" ? "Date Added" : "Type"}
               <ChevronDown size={17} className="ml-0.5 text-gray-400" />
@@ -88,14 +99,14 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
               <>
                 <span className="text-gray-500 text-xs">{selected.length} selected</span>
                 <button
-                  className="text-xs flex items-center gap-1 text-red-600 px-2.5 py-1.5 rounded-md border border-red-200 bg-white hover:bg-red-50 transition"
+                  className="text-xs flex items-center gap-1 text-red-600 px-3 py-1 rounded-md border border-red-200 bg-white hover:bg-red-50 transition font-medium h-9"
                   onClick={handleDeleteSelected}
                   type="button"
                 >
                   <Trash2 size={15} /> Delete
                 </button>
                 <button
-                  className="text-xs text-gray-600 rounded-md px-2.5 py-1.5 border border-gray-200 bg-white hover:bg-yellow-50 transition"
+                  className="text-xs text-gray-600 rounded-md px-3 py-1 border border-gray-200 bg-white hover:bg-yellow-50 transition font-medium h-9"
                   onClick={clearSelection}
                   type="button"
                 >
@@ -104,7 +115,7 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
               </>
             ) : (
               <button
-                className="text-xs text-gray-600 rounded-md px-2.5 py-1.5 border border-gray-200 bg-white hover:bg-yellow-50 transition"
+                className="text-xs text-gray-600 rounded-md px-3 py-1 border border-gray-200 bg-white hover:bg-yellow-50 transition font-medium h-9"
                 onClick={selectAll}
                 type="button"
               >
