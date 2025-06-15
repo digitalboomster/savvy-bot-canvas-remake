@@ -127,6 +127,12 @@ const ChatPage = () => {
     // ... Optionally handle other features
   };
 
+  // THIS is the updated handler for the Document Modal close/back chevron:
+  const handleCloseDocsAndShowFeatures = () => {
+    setShowDocsViewer(false);
+    setShowFeaturesMenu(true);
+  };
+
   return (
     <div className={`${themeClasses} flex flex-col`}>
       <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
@@ -155,7 +161,7 @@ const ChatPage = () => {
       />
 
       {/* Document Viewer Modal */}
-      <DocumentViewerModal open={showDocsViewer} onClose={() => setShowDocsViewer(false)} />
+      <DocumentViewerModal open={showDocsViewer} onClose={handleCloseDocsAndShowFeatures} />
 
       {/* Input Area */}
       <ChatInput
