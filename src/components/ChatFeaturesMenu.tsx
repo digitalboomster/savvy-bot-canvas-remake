@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Camera, Upload } from "lucide-react";
 
@@ -57,6 +58,13 @@ const features: Feature[] = [
     icon: <IconAnalyse />,
     iconBgClass: "bg-blue-50",
     iconBorder: "border-blue-100"
+  },
+  {
+    key: "upload",
+    label: "Upload",
+    icon: <Upload size={20} color="#1DD75B" strokeWidth={2.2} />,
+    iconBgClass: "bg-green-100",
+    iconBorder: "border-green-200"
   }
 ];
 

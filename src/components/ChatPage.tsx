@@ -7,10 +7,8 @@ import ChatWelcome from './ChatWelcome';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import DocumentViewerModal from './DocumentViewerModal';
-import UploadDocumentModal from './UploadDocumentModal';
 import HealMeModal from "./HealMeModal";
 import CaptureReceiptPage from "./CaptureReceiptPage";
-import UploadDocumentPage from "./UploadDocumentPage";
 import { toast } from "@/hooks/use-toast";
 import { useChat } from "@/hooks/useChat";
 import { useChatModals } from "@/hooks/useChatModals";
@@ -51,7 +49,6 @@ const ChatPage = () => {
     showDocsViewer, setShowDocsViewer,
     showHealMe, setShowHealMe,
     showCaptureReceipt, setShowCaptureReceipt,
-    showUploadDocumentPage, setShowUploadDocumentPage,
     handleFeatureSelect,
     handleMoodSelect,
     handleCloseDocsAndShowFeatures,
@@ -108,7 +105,6 @@ const ChatPage = () => {
       />
 
       <DocumentViewerModal open={showDocsViewer} onClose={handleCloseDocsAndShowFeatures} />
-      <UploadDocumentModal open={showUploadDocumentPage} onClose={() => setShowUploadDocumentPage(false)} />
       <HealMeModal
         open={showHealMe}
         onClose={() => setShowHealMe(false)}
