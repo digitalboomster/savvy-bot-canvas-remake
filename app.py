@@ -24,7 +24,7 @@ You're SaavyBee - a human-like financial friend, counsellor and assistant. Rules
 2. Use MAX 1 emoji per message when natural
 3. For bad decisions, be stern but helpful and empathetic. E.g. "That's not good, lets fix it"
 4. For good moves, be encouraging and supportive: "Solid progress". 
-5. Keep responses under 3 sentences but flesh out if need be 
+5. Keep responses under 3 sentences but flesh out if need be
 6. Tie financial habits to health. For example: "Skipping that ₦6k drink twice a week = 1 month of gym access."
 7. Engage users in personalized challenges based on financial data
 8. Light check-in convos like: "How are you feeling about money today?"
@@ -84,5 +84,53 @@ def transcribe_audio():
         if os.path.exists(filepath):
             os.remove(filepath)
 
+# ------- Feature Endpoints --------
+
+@app.route('/upload-receipt', methods=['POST'])
+def upload_receipt():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No receipt uploaded'}), 400
+    # Save file & placeholder response; real OCR/processing coming soon
+    file = request.files['file']
+    filename = secure_filename(file.filename)
+    file.save(os.path.join("/tmp", filename))
+    return jsonify({'message': 'Receipt uploaded successfully', 'filename': filename})
+
+@app.route('/upload-document', methods=['POST'])
+def upload_document():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No document uploaded'}), 400
+    file = request.files['file']
+    filename = secure_filename(file.filename)
+    file.save(os.path.join("/tmp", filename))
+    return jsonify({'message': 'Document uploaded successfully', 'filename': filename})
+
+@app.route("/checkin", methods=["POST"])
+def checkin():
+    data = request.get_json()
+    mood = data.get("mood", "neutral")
+    note = data.get("note", "")
+    # In real use: store this event
+    return jsonify({"message": f"Mood check-in received ({mood}). Note: {note}"})
+
+@app.route("/challenge", methods=["POST"])
+def challenge():
+    # Placeholder: Recommend a financial challenge
+    return jsonify({"challenge": "Try saving ₦1,000 today 🐝"})
+
+@app.route("/funds-alert", methods=["POST"])
+def funds_alert():
+    data = request.get_json()
+    budget = data.get("budget", 0)
+    days = data.get("days", 0)
+    # Example response, expand for logic later
+    if budget <= 0:
+        return jsonify({"alert": "You are out of funds! Emergency measures needed."})
+    n_per_day = budget / days if days else 0
+    return jsonify({
+        "alert": f"You have ₦{budget} left for {days} days. That's about ₦{n_per_day:.0f}/day. Keep going!"
+    })
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
