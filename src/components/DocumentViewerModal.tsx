@@ -2,6 +2,7 @@
 import React, { useRef } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Upload } from "lucide-react";
+import DocumentViewerModalHeader from "./DocumentViewerModalHeader";
 
 interface DocumentViewerModalProps {
   open: boolean;
@@ -38,16 +39,22 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
         className="max-w-md w-full p-0 rounded-2xl overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 transition-colors duration-300"
         style={{ borderRadius: 24 }}
       >
-        {/* Header style matching chat */}
-        <div className="flex flex-col items-center justify-center pt-7 pb-2 border-b border-black/10 dark:border-white/10 bg-white/80 dark:bg-black/50 backdrop-blur-md">
-          <span className="text-lg font-black text-gray-900 dark:text-white">My Documents</span>
-        </div>
-        {/* Divider to mirror features panel */}
-        <div className="w-full h-[1px] bg-[#efe2bc] mb-0" />
-        {/* Upload Button */}
-        <div className="flex justify-end pr-8 pt-4">
+        <DocumentViewerModalHeader onBack={onClose} />
+
+        {/* Body with "No documents yet" */}
+        <div className="p-8 flex flex-col items-center justify-center text-center w-full min-h-[250px] bg-white dark:bg-gray-900 rounded-b-2xl">
+          <span className="text-5xl mb-4" role="img" aria-label="Empty">
+            📄
+          </span>
+          <span className="text-lg font-medium text-gray-800 dark:text-gray-200">
+            No documents yet
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-xs mx-auto">
+            Upload your first document to get started. Accepted formats: PDF,
+            CSV, JPG, PNG.
+          </span>
           <button
-            className="flex items-center gap-2 bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-500 transition mb-2"
+            className="mt-6 flex items-center gap-2 bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-500 transition"
             onClick={handleUploadClick}
             type="button"
           >
@@ -63,14 +70,6 @@ const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
             onChange={handleFileChange}
             multiple={false}
           />
-        </div>
-        {/* Body with "No documents yet" */}
-        <div className="p-8 flex flex-col items-center justify-center text-center w-full min-h-[170px] bg-white dark:bg-gray-900 rounded-b-2xl">
-          <span className="text-3xl mb-2" role="img" aria-label="Empty">📄</span>
-          <span className="text-lg font-medium text-gray-600 dark:text-gray-300">No documents yet</span>
-          <span className="text-sm text-gray-400 mt-1">
-            Upload or create documents, and they’ll show up here.
-          </span>
         </div>
       </DialogContent>
     </Dialog>

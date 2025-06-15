@@ -1,4 +1,3 @@
-
 import React from "react";
 
 interface ChatWelcomeProps {
@@ -6,6 +5,21 @@ interface ChatWelcomeProps {
   starterPrompts: string[];
   onPromptClick: (prompt: string) => void;
 }
+
+const AiAvatar = ({ isDarkMode }: { isDarkMode: boolean }) => (
+  <div
+    style={{
+      width: "47px",
+      height: "47px",
+      flexShrink: 0,
+      background:
+        "url(/lovable-uploads/1cfab2ec-5b69-4037-9238-241ebb26448f.png) lightgray -1.484px 1.295px / 108.574% 99.841% no-repeat",
+      borderRadius: "50%",
+      border: isDarkMode ? "2px solid #333" : "2px solid #fff",
+      boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+    }}
+  />
+);
 
 const ChatWelcome: React.FC<ChatWelcomeProps> = ({
   isDarkMode, starterPrompts, onPromptClick
@@ -15,9 +29,7 @@ const ChatWelcome: React.FC<ChatWelcomeProps> = ({
       {/* Privacy Message */}
       <div className={`${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} backdrop-blur-sm border rounded-2xl p-6`}>
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-            <span className="text-lg">🤖</span>
-          </div>
+          <AiAvatar isDarkMode={isDarkMode} />
           <div className="flex-1">
             <p className={`${isDarkMode ? 'text-white' : 'text-gray-900'} mb-2`}>
               This is private message, between you and buddy. This chat is end to end encrypted...
@@ -28,9 +40,7 @@ const ChatWelcome: React.FC<ChatWelcomeProps> = ({
       {/* AI Welcome Message */}
       <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white shadow-sm border border-gray-200'} rounded-2xl p-4`}>
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shrink-0">
-            <span className="text-lg">🤖</span>
-          </div>
+          <AiAvatar isDarkMode={isDarkMode} />
           <div className="flex-1">
             <p className="text-gray-800">
               Hey there! 👋 I'm Savvy, your smart assistant here on SavvyBee — built to help you take control of your money, one simple step at a time.
