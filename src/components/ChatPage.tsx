@@ -156,6 +156,7 @@ const ChatPage = () => {
     return (
       <CaptureReceiptPage
         onBack={() => setShowCaptureReceipt(false)}
+        isDarkMode={isDarkMode}
       />
     );
   }
