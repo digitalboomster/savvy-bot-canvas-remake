@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { ArrowLeft, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Moon, Sun, Ellipsis } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface ChatHeaderProps {
@@ -10,27 +9,35 @@ interface ChatHeaderProps {
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ isDarkMode, toggleTheme }) => {
   const navigate = useNavigate();
-  
   return (
-    <div className={`flex items-center justify-between px-4 py-3 border-b ${isDarkMode ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'}`}>
+    <div className={`flex items-center justify-between p-4 border-b ${isDarkMode ? 'border-white/10' : 'border-black/10'}`}>
       <button 
         onClick={() => navigate('/')}
-        className={`p-2 hover:${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} rounded-lg transition-colors duration-200`}
+        className={`p-2 hover:${isDarkMode ? 'bg-white/10' : 'bg-black/10'} rounded-lg transition-colors duration-200`}
       >
-        <ArrowLeft size={20} className={isDarkMode ? "text-gray-300" : "text-gray-700"} />
+        <ArrowLeft size={24} className={isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-black"} />
       </button>
-      
-      <h1 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-        Savvy Bot
-      </h1>
-      
-      <button
-        onClick={toggleTheme}
-        className={`p-2 hover:${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} rounded-lg transition-colors duration-200`}
-        aria-label="More options"
-      >
-        <MoreVertical size={20} className={isDarkMode ? "text-gray-300" : "text-gray-700"} />
-      </button>
+      <h1 className="text-xl font-semibold">Savvy Bot</h1>
+      <div className="flex items-center gap-2">
+        {/* Theme toggle button */}
+        <button
+          onClick={toggleTheme}
+          className={`p-2 rounded-lg transition-colors duration-200 ${isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/10'}`}
+          aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDarkMode 
+            ? <Sun size={22} className="text-yellow-400" />
+            : <Moon size={22} className="text-gray-800" />
+          }
+        </button>
+        {/* Existing three dots menu (static visual) */}
+        <button
+          className={`p-2 rounded-lg transition-colors duration-200 ${isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/10'}`}
+          aria-label="More options"
+        >
+          <Ellipsis size={22} className={isDarkMode ? "text-gray-300" : "text-gray-600"} />
+        </button>
+      </div>
     </div>
   );
 };
