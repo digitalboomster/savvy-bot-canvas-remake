@@ -45,18 +45,15 @@ const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
     };
   }, []);
 
-  const handleCapture = () => {
-    if (!videoRef.current) return;
-    const canvas = document.createElement("canvas");
-    canvas.width = FRAME_WIDTH - 40;
-    canvas.height = FRAME_HEIGHT - 40;
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL("image/png");
-      console.log('Captured image', dataUrl);
-    }
-  };
+  // Replace console.log('Captured image', dataUrl);
+// with:
+const formData = new FormData();
+formData.append('file', dataURLtoBlob(dataUrl), 'receipt.png');
+
+fetch('https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev/upload-receipt', {
+  method: 'POST',
+  body: formData
+});
 
   const mainBg =
     isDarkMode
