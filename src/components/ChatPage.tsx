@@ -7,6 +7,7 @@ import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import DocumentViewerModal from './DocumentViewerModal';
 import HealMeModal from "./HealMeModal";
+import SmartAssistantFeatures from './SmartAssistantFeatures';
 
 // Message type
 interface Message {
@@ -26,6 +27,7 @@ const ChatPage = () => {
   const [showFeaturesMenu, setShowFeaturesMenu] = useState(false);
   const [showDocsViewer, setShowDocsViewer] = useState(false);
   const [showHealMe, setShowHealMe] = useState(false);
+  const [showSmartAssistant, setShowSmartAssistant] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -123,6 +125,11 @@ const ChatPage = () => {
 
   // Handler for feature menu feature click
   const handleFeatureSelect = (featureKey: string) => {
+    if (featureKey === "smart-assistant") {
+      setShowSmartAssistant(true);
+      setShowFeaturesMenu(false);
+      return;
+    }
     if (featureKey === "documents") {
       setShowDocsViewer(true);
     }
@@ -146,25 +153,46 @@ const ChatPage = () => {
     setShowFeaturesMenu(true);
   };
 
+  // Handler to close Smart Assistant sub-page
+  const handleBackFromSmartAssistant = () => {
+    setShowSmartAssistant(false);
+  };
+
   return (
     <div className={`${themeClasses} flex flex-col`}>
       <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-      {/* Welcome Section */}
-      {showWelcome && (
-        <ChatWelcome 
-          isDarkMode={isDarkMode}
-          starterPrompts={starterPrompts}
-          onPromptClick={handlePromptClick}
-        />
-      )}
 
-      {/* Messages */}
-      <ChatMessages
-        messages={messages}
-        isAiTyping={isAiTyping}
-        isDarkMode={isDarkMode}
-        messagesEndRef={messagesEndRef}
-      />
+      {/* Show Smart Assistant subpage if open */}
+      {showSmartAssistant ? (
+        <SmartAssistantFeatures
+          onBack={handleBackFromSmartAssistant}
+          // Optionally, add onFeatureSelect to drill down further
+          onFeatureSelect={(featureKey) => {
+            // For now, just return to chat
+            setShowSmartAssistant(false);
+            // You can implement further logic here if needed
+          }}
+        />
+      ) : (
+        <>
+          {/* Welcome Section */}
+          {showWelcome && (
+            <ChatWelcome 
+              isDarkMode={isDarkMode}
+              starterPrompts={starterPrompts}
+              onPromptClick={handlePromptClick}
+            />
+          )}
+
+          {/* Messages */}
+          <ChatMessages
+            messages={messages}
+            isAiTyping={isAiTyping}
+            isDarkMode={isDarkMode}
+            messagesEndRef={messagesEndRef}
+          />
+        </>
+      )}
 
       {/* Features Floating Menu */}
       <ChatFeaturesMenu
@@ -183,15 +211,17 @@ const ChatPage = () => {
         onMoodSelect={handleMoodSelect}
       />
 
-      {/* Input Area */}
-      <ChatInput
-        inputText={inputText}
-        setInputText={setInputText}
-        onSend={handleSendMessage}
-        isDarkMode={isDarkMode}
-        featuresRotated={featuresRotated}
-        onFeaturesButtonClick={onFeaturesButtonClick}
-      />
+      {/* Input Area only if not in Smart Assistant subpage */}
+      {!showSmartAssistant && (
+        <ChatInput
+          inputText={inputText}
+          setInputText={setInputText}
+          onSend={handleSendMessage}
+          isDarkMode={isDarkMode}
+          featuresRotated={featuresRotated}
+          onFeaturesButtonClick={onFeaturesButtonClick}
+        />
+      )}
     </div>
   );
 };
