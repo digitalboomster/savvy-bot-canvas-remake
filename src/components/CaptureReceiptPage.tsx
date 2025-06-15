@@ -6,108 +6,86 @@ interface CaptureReceiptPageProps {
   onBack: () => void;
 }
 
-const today = new Date();
-const formattedDate = today.toLocaleDateString("en-GB", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-});
-
 const CaptureReceiptPage: React.FC<CaptureReceiptPageProps> = ({ onBack }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] relative">
+    <div className="min-h-screen flex flex-col bg-white relative">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 bg-[#f7a900]">
+      <div className="relative flex items-center justify-center py-6 px-2 border-b border-black/10">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 focus:outline-none"
+          className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-black/5 transition"
           aria-label="Back"
         >
-          <ArrowLeft className="text-white" size={26} />
+          <ArrowLeft size={26} className="text-black" />
         </button>
-        <div className="flex items-center gap-3">
-          <span className="w-10 h-10 rounded-full overflow-hidden flex justify-center items-center bg-white">
-            {/* bee emoji (replace with logo if needed) */}
-            <span className="text-2xl" role="img" aria-label="bee">🐝</span>
-          </span>
-          <span className="text-white text-lg font-semibold">
-            Capture Receipt
-          </span>
+        <h1 className="text-xl font-bold text-black text-center flex-1" style={{letterSpacing: "-0.01em"}}>
+          Capture Receipt
+        </h1>
+        {/* Placeholder for three dots (right align, hidden visually for now) */}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <span className="block w-7 h-7" />
         </div>
-        <span className="text-white text-sm">{formattedDate}</span>
       </div>
-      {/* Camera Frame */}
-      <div className="flex-1 flex flex-col items-center justify-start px-4 py-8">
-        <div className="w-full max-w-md">
-          <div className="rounded-2xl bg-black p-5 flex flex-col items-center mb-6 shadow-lg">
-            <div className="w-full flex flex-col gap-3 items-center">
-              <span className="text-white font-medium mb-2 text-center">
-                Position receipt in frame
-              </span>
-              <div className="relative w-full h-[300px] bg-black rounded-2xl flex items-center justify-center border-4 border-transparent">
-                {/* Yellow border corners, SVG overlays */}
-                <svg
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 320 300"
-                  className="absolute left-0 top-0 pointer-events-none"
-                  style={{ zIndex: 3, borderRadius: "18px" }}
-                >
-                  <rect
-                    x="10"
-                    y="10"
-                    width="300"
-                    height="280"
-                    rx="14"
-                    fill="none"
-                    stroke="#F7A900"
-                    strokeWidth="3"
-                  />
-                  {/* Four corner accents */}
-                  <line x1="10" y1="20" x2="10" y2="10" stroke="#F7A900" strokeWidth="6"/>
-                  <line x1="10" y1="10" x2="35" y2="10" stroke="#F7A900" strokeWidth="6"/>
-                  
-                  <line x1="310" y1="10" x2="285" y2="10" stroke="#F7A900" strokeWidth="6"/>
-                  <line x1="310" y1="10" x2="310" y2="35" stroke="#F7A900" strokeWidth="6"/>
 
-                  <line x1="10" y1="290" x2="10" y2="265" stroke="#F7A900" strokeWidth="6"/>
-                  <line x1="10" y1="290" x2="35" y2="290" stroke="#F7A900" strokeWidth="6"/>
-
-                  <line x1="310" y1="290" x2="310" y2="265" stroke="#F7A900" strokeWidth="6"/>
-                  <line x1="310" y1="290" x2="285" y2="290" stroke="#F7A900" strokeWidth="6"/>
-                </svg>
-                {/* Camera preview would go here in real implementation */}
-                <div className="w-full h-full" />
-              </div>
-            </div>
+      {/* Main */}
+      <div className="flex-1 flex flex-col items-center justify-start pt-8 pb-0 px-5">
+        {/* Camera Frame */}
+        <div className="w-full max-w-md flex flex-col items-center">
+          {/* Dark gray area with bold yellow corners and white label */}
+          <div className="relative w-full h-[420px] max-w-[400px] rounded-2xl overflow-visible bg-transparent flex items-center justify-center mb-8">
+            {/* SVG border corners */}
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 360 420"
+              className="absolute top-0 left-0 w-full h-full pointer-events-none"
+            >
+              {/* Corner paths: 8px thick yellow */}
+              {/* Top Left */}
+              <path d="M25,72 Q25,25 72,25" stroke="#F7A900" strokeWidth="8" fill="none" />
+              {/* Top Right */}
+              <path d="M288,25 Q335,25 335,72" stroke="#F7A900" strokeWidth="8" fill="none" />
+              {/* Bottom Left */}
+              <path d="M25,348 Q25,395 72,395" stroke="#F7A900" strokeWidth="8" fill="none" />
+              {/* Bottom Right */}
+              <path d="M288,395 Q335,395 335,348" stroke="#F7A900" strokeWidth="8" fill="none" />
+            </svg>
+            {/* Dark gray frame area */}
+            <div className="absolute left-[25px] top-[25px] right-[25px] bottom-[25px] bg-neutral-700 rounded-2xl flex items-start justify-center z-0" />
+            {/* Label */}
+            <span className="z-10 absolute top-9 left-1/2 -translate-x-1/2 text-white font-medium text-lg pointer-events-none select-none">
+              Position Receipt in frame
+            </span>
           </div>
         </div>
+
         {/* Capture Button */}
         <button
-          className="w-full max-w-md flex items-center justify-center gap-2 rounded-xl bg-[#ffd8a3] text-[#333] font-semibold py-3 px-4 mb-4 transition-colors duration-150 active:scale-95 shadow"
+          className="w-full max-w-md h-14 rounded-xl border-2 border-[#F7A900] bg-[#FFD426] hover:bg-[#ffc800] text-black font-bold text-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-98 mb-4"
           aria-label="Capture Receipt"
         >
           <Camera size={22} className="mr-2" />
           Capture Receipt
         </button>
-        <p className="text-gray-500 text-center mb-5 max-w-md">
-          Position your receipt or bank statement within the frame and ensure all text is clearly visible
-        </p>
-        {/* Upload from Gallery  */}
+
+        {/* Upload Button */}
         <button
-          className="w-full max-w-xs flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-2 px-4 shadow-sm text-[#222] font-medium hover:bg-gray-50 transition-colors duration-150"
+          className="w-full max-w-md h-14 rounded-xl border-2 border-[#F7A900] bg-black hover:bg-neutral-900 text-white font-medium text-lg flex items-center justify-center gap-2 shadow-sm transition active:scale-98"
           aria-label="Upload from gallery"
+          style={{marginBottom: "12px"}}
         >
-          <Upload size={20} />
+          <Upload size={22} className="mr-2" />
           Upload from gallery
         </button>
       </div>
-      {/* Footer help note */}
-      <div className="absolute bottom-0 left-0 w-full py-2 bg-[#f9f9f9] border-t text-center text-gray-400 text-sm">
+
+      {/* (Hidden) Footer help note */}
+      {/* <div className="absolute bottom-0 left-0 w-full py-2 bg-[#f9f9f9] border-t text-center text-gray-400 text-sm">
         This chatbot is for guidance only; seek professional help when needed.
-      </div>
+      </div> */}
     </div>
   );
 };
 
 export default CaptureReceiptPage;
+
