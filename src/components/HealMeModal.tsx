@@ -49,11 +49,14 @@ const HealMeModal: React.FC<HealMeModalProps> = ({ open, onClose, onMoodSelect }
                 onClick={() => onMoodSelect?.(key)}
                 tabIndex={0}
               >
-                <img
-                  src={img}
-                  alt={label}
-                  className="rounded-full mb-2 bg-gray-200"
-                  style={{ width: 100, height: 100, objectFit: "cover" }}
+                <div
+                  aria-label={label}
+                  className="rounded-full mb-2"
+                  style={{
+                    width: 100,
+                    height: 100,
+                    background: `url(${img}) lightgray 50% / cover no-repeat`,
+                  }}
                 />
                 <span className={`font-semibold text-base ${isDarkMode ? "text-gray-100" : "text-gray-900"}`}>
                   {label}
