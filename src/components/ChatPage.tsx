@@ -61,32 +61,51 @@ const ChatPage = () => {
     setFeaturesRotated(showFeaturesMenu);
   }, [showFeaturesMenu]);
 
-  const handleSendMessage = (text: string) => {
-    if (!text.trim()) return;
+  const handleSendMessage = async (text: string) => {
+  if (!text.trim()) return;
 
-    const userMessage = {
-      id: Date.now().toString(),
-      text: text.trim(),
-      isUser: true,
+  const userMessage = {
+    id: Date.now().toString(),
+    text: text.trim(),
+    isUser: true,
+    timestamp: new Date()
+  };
+
+  setMessages(prev => [...prev, userMessage]);
+  setInputText('');
+  setShowWelcome(false);
+  setIsAiTyping(true);
+
+  try {
+    const response = await fetch('https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text.trim() })
+    });
+    
+    const data = await response.json();
+    
+    const aiMessage = {
+      id: (Date.now() + 1).toString(),
+      text: data.reply || 'Sorry, I had trouble responding.',
+      isUser: false,
       timestamp: new Date()
     };
+    
+    setMessages(prev => [...prev, aiMessage]);
+  } catch (error) {
+    const errorMessage = {
+      id: (Date.now() + 1).toString(),
+      text: 'Sorry, I'm having connection issues. Please try again.',
+      isUser: false,
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, errorMessage]);
+  } finally {
+    setIsAiTyping(false);
+  }
+};
 
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
-    setShowWelcome(false);
-    setIsAiTyping(true);
-
-    setTimeout(() => {
-      const aiMessage = {
-        id: (Date.now() + 1).toString(),
-        text: getAiResponse(text),
-        isUser: false,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, aiMessage]);
-      setIsAiTyping(false);
-    }, 2000);
-  };
 
   // Basic AI response sim
   const getAiResponse = (userText: string) => {
