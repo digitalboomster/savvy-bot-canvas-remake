@@ -14,16 +14,6 @@ import { toast } from "@/hooks/use-toast";
 import { useChat } from "@/hooks/useChat";
 import { useChatModals } from "@/hooks/useChatModals";
 
-// Message type
-interface Message {
-  id: string;
-  text: string;
-  isUser: boolean;
-  timestamp: Date;
-}
-
-const BACKEND_URL = "https://4d9a25eb-4793-482a-a348-2e1c21e2b286-00-2gfu2fuimic4.kirk.replit.dev";
-
 const starterPrompts = [
   "How can I start saving money?",
   "Help me create a budget.",
@@ -58,6 +48,7 @@ const ChatPage = () => {
     setShowWelcome,
     messagesEndRef,
     handleSendMessage,
+    loading
   } = useChat();
 
   const {
@@ -94,6 +85,17 @@ const ChatPage = () => {
       <CaptureReceiptPage
         onBack={() => setShowCaptureReceipt(false)}
       />
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className={`${themeClasses} flex items-center justify-center`}>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+          <p>Loading conversation...</p>
+        </div>
+      </div>
     );
   }
 
