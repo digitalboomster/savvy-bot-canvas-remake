@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { X, MoreVertical, MessageCircle, Trash2, ChevronLeft, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ConversationHistory from './ConversationHistory';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Card, CardContent } from '@/components/ui/card';
-import { useConversations } from '@/hooks/useConversations';
 
 interface Conversation {
   id: string;
@@ -15,20 +15,57 @@ interface Conversation {
 
 const ChatInterface = () => {
   const navigate = useNavigate();
-  const { isDarkMode, toggleTheme } = useTheme();
-  const { conversations, loading, createConversation, deleteConversation } = useConversations();
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [showDeleteMode, setShowDeleteMode] = useState(false);
 
-  const handleStartConversation = async () => {
-    try {
-      const newConversation = await createConversation(
-        'New Conversation',
-        'Started a new conversation with Savvy Bot.'
-      );
-      navigate('/chat', { state: { conversationId: newConversation.id } });
-    } catch (error) {
-      console.error('Failed to start conversation:', error);
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  // Load conversations from localStorage on mount
+  useEffect(() => {
+    const savedConversations = localStorage.getItem('savvy-conversations');
+    if (savedConversations) {
+      setConversations(JSON.parse(savedConversations));
+    } else {
+      // Default conversations
+      const defaultConversations = [
+        {
+          id: '1',
+          title: 'Tips on Savings',
+          timestamp: '2d ago',
+          preview: 'How can I improve my savings rate?'
+        },
+        {
+          id: '2',
+          title: 'Budget Analysis',
+          timestamp: '2d ago',
+          preview: 'Please analyze my monthly expenses.'
+        }
+      ];
+      setConversations(defaultConversations);
+      localStorage.setItem('savvy-conversations', JSON.stringify(defaultConversations));
     }
+  }, []);
+
+  // Save conversations to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('savvy-conversations', JSON.stringify(conversations));
+  }, [conversations]);
+
+  const handleStartConversation = () => {
+    const newConversation: Conversation = {
+      id: Date.now().toString(),
+      title: 'New Conversation',
+      timestamp: 'now',
+      preview: 'Started a new conversation with Savvy Bot.'
+    };
+    const updatedConversations = [newConversation, ...conversations];
+    setConversations(updatedConversations);
+    navigate('/chat', { state: { conversationId: newConversation.id } });
+  };
+
+  const handleDeleteConversation = (conversationId: string) => {
+    setConversations(prev => prev.filter(conv => conv.id !== conversationId));
+    setShowDeleteMode(false);
   };
 
   const themeClasses = isDarkMode 
@@ -54,6 +91,7 @@ const ChatInterface = () => {
             }}
         />
         <div className="relative z-10 flex flex-col h-full text-white max-w-md mx-auto">
+            {/* Header */}
             <div className={`w-full flex items-center justify-between px-1 py-4`}>
                 <button
                     onClick={() => navigate('/')}
@@ -69,6 +107,7 @@ const ChatInterface = () => {
                     <MoreVertical size={22} />
                 </button>
             </div>
+            {/* Greeting */}
             <div className="w-full px-4 flex-grow flex flex-col justify-center">
               <div className="mb-4">
                 <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
@@ -83,7 +122,9 @@ const ChatInterface = () => {
         </div>
       </div>
       
+      {/* Content in centralized container */}
       <div className="w-full max-w-md mx-auto px-4 relative z-10 -mt-12 md:-mt-16">
+        {/* Conversation Starter */}
         <div className="bg-yellow-400 p-6 rounded-2xl mb-8 shadow-xl transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
           <h3 className="text-black font-semibold mb-4 text-lg">Start Conversation</h3>
           <div className="flex items-center gap-3 mb-4">
@@ -106,6 +147,7 @@ const ChatInterface = () => {
           </button>
         </div>
         
+        {/* Monthly Reports */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Monthly Reports</h3>
             <Card className="text-center shadow-md">
@@ -115,13 +157,13 @@ const ChatInterface = () => {
             </Card>
         </div>
         
+        {/* Recent Conversations */}
         <ConversationHistory 
           conversations={conversations} 
-          onDeleteConversation={deleteConversation}
+          onDeleteConversation={handleDeleteConversation}
           showDeleteMode={showDeleteMode}
           onToggleDeleteMode={setShowDeleteMode}
           isDarkMode={isDarkMode}
-          loading={loading}
         />
       </div>
     </div>
