@@ -26,9 +26,9 @@ const ChatWelcome: React.FC<ChatWelcomeProps> = ({
   isDarkMode, starterPrompts, onPromptClick
 }) => {
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-4">
       {/* AI Welcome Message */}
-      <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white shadow-sm border border-gray-200'} rounded-2xl p-4`}>
+      <div className={`${isDarkMode ? 'bg-gray-100' : 'bg-white shadow-sm border border-gray-200'} rounded-2xl p-3`}>
         <div className="flex items-start gap-3">
           <AiAvatar isDarkMode={isDarkMode} />
           <div className="flex-1">
@@ -39,12 +39,12 @@ const ChatWelcome: React.FC<ChatWelcomeProps> = ({
         </div>
       </div>
       {/* Starter Prompts */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {starterPrompts.map((prompt, index) => (
           <button
             key={index}
             onClick={() => onPromptClick(prompt)}
-            className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-4 text-left transition-all duration-200 text-sm hover:-translate-y-1`}
+            className={`${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-black/5 border-black/10 hover:bg-black/10'} backdrop-blur-sm border rounded-xl p-3 text-left transition-all duration-200 text-sm hover:-translate-y-1`}
           >
             {prompt}
           </button>
