@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       const { rows } = await sql`
         SELECT id, text, is_user, timestamp 
         FROM messages 
-        WHERE conversation_id = ${conversationId} 
+        WHERE conversation_id = ${conversationId}
         ORDER BY timestamp ASC
       `;
       return res.status(200).json(rows);
