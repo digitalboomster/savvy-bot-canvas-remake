@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MessageCircle, Trash2 } from 'lucide-react';
 
@@ -15,6 +14,7 @@ interface ConversationHistoryProps {
   showDeleteMode: boolean;
   onToggleDeleteMode: (show: boolean) => void;
   isDarkMode: boolean;
+  loading?: boolean;
 }
 
 const ConversationHistory: React.FC<ConversationHistoryProps> = ({ 
@@ -22,7 +22,8 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
   onDeleteConversation, 
   showDeleteMode, 
   onToggleDeleteMode,
-  isDarkMode 
+  isDarkMode,
+  loading = false
 }) => {
   const getConversationIcon = (title: string) => {
     if (title.toLowerCase().includes('savings')) {
@@ -36,6 +37,25 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
   const handleLongPress = (conversationId: string) => {
     onToggleDeleteMode(true);
   };
+
+  if (loading) {
+    return (
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Recent Conversation</h3>
+        <div className="space-y-3">
+          <div className={`${isDarkMode ? 'bg-white/5' : 'bg-black/5'} rounded-xl p-4 animate-pulse`}>
+            <div className="flex items-start gap-3">
+              <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+              <div className="flex-1">
+                <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -91,7 +111,7 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
           </div>
         ))}
 
-        {conversations.length === 0 && (
+        {conversations.length === 0 && !loading && (
           <div className="text-center py-8 text-gray-400">
             <MessageCircle size={48} className="mx-auto mb-4 opacity-50" />
             <p>No conversations yet</p>
