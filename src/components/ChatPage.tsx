@@ -102,7 +102,7 @@ const ChatPage = () => {
       {showWelcome ? (
         <>
           <div className="w-full bg-[#212226] rounded-b-[32px] text-white">
-              <div className="max-w-md mx-auto h-[272px] flex flex-col">
+              <div className="max-w-md mx-auto h-[200px] flex flex-col">
                   <ChatHeader isDarkMode={isDarkMode} toggleTheme={toggleTheme} isAlwaysDark />
                   <div className="px-6 flex-grow flex items-center">
                       <div className="flex items-start gap-3">
